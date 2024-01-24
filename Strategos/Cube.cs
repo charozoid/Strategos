@@ -25,4 +25,16 @@ public class Cube
         Cube cube = new Cube(q, r, s);
         return cube;
     }
+    public static Cube GetDirection(Direction direction)
+    {
+        return Hex.directionDictionary[direction];
+    }
+    public static Cube Add(Cube hex, Cube vec)
+    {
+        return new Cube(hex.Q + vec.Q, hex.R + vec.R, hex.S + vec.S);
+    }
+    public static Cube CubeNeighbor(Cube hex, Direction direction)
+    {
+        return Add(hex, GetDirection(direction));
+    }
 }

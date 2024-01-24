@@ -1,33 +1,52 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 
+public enum Direction
+{
+    NW,
+    NE,
+    E,
+    SE,
+    SW,
+    W
+}
 public class Hex
 {
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
+
     public Sprite Sprite { get; set; }
     public Text text = new Text("", Strategos.font);
+    public static Dictionary<Direction, Cube> directionDictionary = new Dictionary<Direction, Cube>();
     public Hex(int Q, int R)
     {
         this.Q = Q;
         this.R = R;
         Sprite = new Sprite(Strategos.tileTexture);
-        Sprite.TextureRect = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        Sprite.Position = HexToPixel(this) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2);
+        Sprite.TextureRect = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT + 10);
+        Sprite.Origin = new Vector2f(0, 0);
+        Sprite.Position = HexToPixel(this) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2 );
         text = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
         text.Position = Sprite.Position + new Vector2f(5, 40);
         text.FillColor = Color.Black;
         text.FillColor = Color.Black;
         
     }
-    public static Hex CubeToHex(Cube cube, HexStorage hexStorage)
+    static Hex()
+    {
+        directionDictionary.Add(Direction.NW, new Cube(0, -1, 1));
+        directionDictionary.Add(Direction.NE, new Cube(1, -1, 0));
+        directionDictionary.Add(Direction.E, new Cube(1, 0, -1));
+        directionDictionary.Add(Direction.SE, new Cube(0, 1, -1));
+        directionDictionary.Add(Direction.SW, new Cube(-1, 1, 0));
+        directionDictionary.Add(Direction.W, new Cube(-1, 0, 1));
+    }
+    public static Hex GetFromCube(Cube cube, HexStorage hexStorage)
     {
         Vector2i axial = Cube.CubeToAxial(cube);
-        
-        return hexStorage.GetHex(axial.X, axial.Y, -axial.X-axial.Y);
+        return hexStorage.GetHex(axial.X, axial.Y, -axial.X - axial.Y);
     }
-
     public static Cube PixelToCube(Vector2f pixel)
     {
         float size = Strategos.TILE_HEIGHT / 2;
@@ -75,6 +94,6 @@ public class Hex
     public void Draw(RenderWindow window)
     {     
         window.Draw(Sprite);
-        window.Draw(text);
+        //window.Draw(text);
     }
 }

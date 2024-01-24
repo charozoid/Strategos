@@ -1,7 +1,7 @@
-﻿public class HexStorage
+﻿
+public class HexStorage
 {
     private Dictionary<(int, int, int), Hex> hexes = new Dictionary<(int, int, int), Hex>();
-
     public void AddHex(Hex hex)
     {
         hexes[(hex.Q, hex.R, hex.S)] = hex;
