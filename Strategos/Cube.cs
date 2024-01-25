@@ -17,7 +17,7 @@ public struct Cube
         Vector2i axial = new Vector2i((int)cube.Q, (int)cube.R);
         return axial;
     }
-    public static Cube AxialToCube(Vector2f hex)
+    public static Cube AxialToCube(Vector2i hex)
     {
         float q = hex.X;
         float r = hex.Y;
@@ -33,13 +33,13 @@ public struct Cube
     {
         return new Cube(hex.Q + vec.Q, hex.R + vec.R, hex.S + vec.S);
     }
-    public static Cube CubeNeighbor(Cube hex, Direction direction)
-    {
-        return Add(hex, GetDirection(direction));
-    }
     public static Cube Subtract(Cube hex, Cube vec)
     {
         return new Cube(hex.Q - vec.Q, hex.R - vec.R, hex.S - vec.S);
+    }
+    public static Cube CubeNeighbor(Cube hex, Direction direction)
+    {
+        return Add(hex, GetDirection(direction));
     }
     public static int Distance(Cube a, Cube b)
     {
