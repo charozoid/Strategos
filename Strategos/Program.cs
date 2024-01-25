@@ -33,6 +33,7 @@ class Strategos
         window.KeyPressed += (sender, e) => InputHandler.KeyPressed(sender, e, view);
         window.MouseButtonPressed += (sender, e) => InputHandler.MouseButtonPressed(sender, e, hexStorage);
         window.MouseWheelScrolled += (sender, e) => InputHandler.MouseWheelScrolled(sender, e, view);
+        window.MouseButtonReleased += (sender, e) => InputHandler.MouseButtonReleased(sender, e, hexStorage);
         int distance = 0;
         Unit soldier = new Unit(new Cube(0, 0, 0));
 
@@ -47,8 +48,8 @@ class Strategos
             Cube cube = Hex.PixelToCube(new Vector2f(worldPos.X, worldPos.Y));
 
             DrawHexagons(window, hexStorage);
-
             window.DispatchEvents();
+
             DrawUnits(window, Unit.unitList);
             window.Display();
         }

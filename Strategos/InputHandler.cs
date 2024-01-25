@@ -4,6 +4,11 @@ using SFML.Window;
 
 public class InputHandler
 {
+    private static List<Cube> cubes { get; set; }
+    static InputHandler()
+    {
+        cubes = new List<Cube>();
+    }
     public static void KeyPressed(object sender, KeyEventArgs e, View view)
     {
         if (e.Code == Keyboard.Key.W)
@@ -43,13 +48,16 @@ public class InputHandler
         }
         if (e.Button == Mouse.Button.Right)
         {
-            List<Cube> cubes = Cube.ObstacleSearch(3, cube, hexStorage);
-            foreach (Cube cubeToChange in cubes)
+            cubes = Cube.FindPath(new Cube(0, 0, 0), cube, hexStorage);
+            if (cubes != null)
             {
-                Hex hexToChange = Hex.GetFromCube(cubeToChange, hexStorage);
-                if (hexToChange != null)
+                foreach (Cube cubeToChange in cubes)
                 {
-                    hexToChange.Sprite.Color = Color.Red;
+                    Hex hexToChange = Hex.GetFromCube(cubeToChange, hexStorage);
+                    if (hexToChange != null)
+                    {
+                        hexToChange.Sprite.Color = Color.Red;
+                    }
                 }
             }
         }
@@ -58,7 +66,20 @@ public class InputHandler
             Hex.GetFromCube(cube, hexStorage).SetType(TileType.Grass);
         }
     }
-
+    public static void MouseButtonReleased(object sender, MouseButtonEventArgs e, HexStorage hexStorage)
+    {
+        if (cubes != null)
+        {
+            foreach (Cube cubeToChange in cubes)
+            {
+                Hex hexToChange = Hex.GetFromCube(cubeToChange, hexStorage);
+                if (hexToChange != null)
+                {
+                    hexToChange.Sprite.Color = Color.White;
+                }
+            }
+        }
+    }
     public static void MouseWheelScrolled(object sender, MouseWheelScrollEventArgs e, View view)
     {
         if (e.Delta > 0)
@@ -70,4 +91,6 @@ public class InputHandler
             view.Zoom(Strategos.zoomSpeed);
         }
     }
+
+
 }

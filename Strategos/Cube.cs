@@ -77,6 +77,19 @@ public class Cube
         }
         return results;
     }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+        Cube otherCube = (Cube)obj;
+        return Q == otherCube.Q && R == otherCube.R && S == otherCube.S;
+    }
+    public override int GetHashCode()
+    {
+        return (Q, R, S).GetHashCode();
+    }
     public static Cube CubeRound(Cube cube)
     {
         float q = MathF.Round(cube.Q);
@@ -101,7 +114,48 @@ public class Cube
         }
         return new Cube(q, r, s);
     }
-    public static List<Cube> ObstacleSearch(int movement, Cube start, HexStorage hexStorage)
+    public static List<Cube> FindPath(Cube start, Cube target, HexStorage hexStorage)
+    {
+        Queue<Cube> frontier = new Queue<Cube>();
+        Dictionary<Cube, Cube> cameFrom = new Dictionary<Cube, Cube>();
+        frontier.Enqueue(start);
+        cameFrom[start] = start;
+        while (frontier.Count > 0)
+        {
+            Cube current = frontier.Dequeue();
+            if (current.Equals(target))
+            {
+                return ReconstructPath(cameFrom, start, target);
+            }
+            foreach (Cube next in CubesInRange(current, 1))
+            {
+                Hex hex = Hex.GetFromCube(next, hexStorage);
+                if (hex != null && hex.TileType != TileType.Mountain && !cameFrom.ContainsKey(next))
+                {
+                    frontier.Enqueue(next);
+                    cameFrom[next] = current;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static List<Cube> ReconstructPath(Dictionary<Cube, Cube> cameFrom, Cube start, Cube target)
+    {
+        List<Cube> path = new List<Cube>();
+        Cube current = target;
+
+        while (current != start)
+        {
+            path.Add(current);
+            current = cameFrom[current];
+        }
+
+        path.Reverse();
+        return path;
+    }
+
+    public static List<Cube> ValidCubesInRange(int movement, Cube start, HexStorage hexStorage)
     {
         List<Cube> frontier = new List<Cube>();
         frontier.Add(start);
