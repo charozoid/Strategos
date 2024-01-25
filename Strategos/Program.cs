@@ -7,13 +7,17 @@ class Strategos
     public const int WINDOW_WIDTH = 1600;
     public const int WINDOW_HEIGHT = 900;
     public static Texture tileTexture = new Texture("../../Assets/hex.png");
+    public static Texture characterTexture = new Texture("../../Assets/characters.png");
     public const int TILE_WIDTH = 97;
     public const int TILE_HEIGHT = 113;
+    public const int CHARACTER_WIDTH = 22;
+    public const int CHARACTER_HEIGHT = 52;
     public static Font font = new Font("../../Assets/arial.ttf");
     public const float ROOTOFTHREE = 1.732f;
-
+    public static List<Hex> hexList = new List<Hex>();
 
     public static float cameraSpeed = 200.0f;
+    public static float zoomSpeed = 1.1f;
 
     public static void Main(string[] args)
     {
@@ -23,39 +27,29 @@ class Strategos
         window.Closed += (sender, args) => window.Close();
         window.SetVerticalSyncEnabled(true);
 
+        HexStorage hexStorage = new HexStorage();
 
         View view = new View(new FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
         window.KeyPressed += (sender, e) => InputHandler.KeyPressed(sender, e, view);
+        window.MouseButtonPressed += (sender, e) => InputHandler.MouseButtonPressed(sender, e, hexStorage);
+        window.MouseWheelScrolled += (sender, e) => InputHandler.MouseWheelScrolled(sender, e, view);
+        int distance = 0;
+        Unit soldier = new Unit(new Cube(0, 0, 0));
 
 
-        HexStorage hexStorage = new HexStorage();
         CreateHexagonsCircle(hexStorage, 5);
         while (window.IsOpen)
         {
             window.SetView(view);
             window.Clear(Color.Black);
 
-            Text text = new Text("Q: R: S:", font, 20);
-            text.Position = new Vector2f(1000, 0);
-            text.FillColor = Color.White;
-            //Vector2f mousePosition = window.MapPixelToCoords(Mouse.GetPosition(), view);
             Vector2f worldPos = window.MapPixelToCoords(Mouse.GetPosition(window), view);
-            if (Mouse.IsButtonPressed(Mouse.Button.Left))
-            {
-
-                Hex hex = Hex.GetFromCube(Hex.PixelToCube(worldPos), hexStorage);
-                if (hex != null)
-                {
-                    hex.Sprite.Color = Color.Red;
-                }
-            }
-
             Cube cube = Hex.PixelToCube(new Vector2f(worldPos.X, worldPos.Y));
-            text.DisplayedString = "Q: " + cube.Q + " R: " + cube.R + " S: " + cube.S;
-            PrintHexagons(window, hexStorage);
+
+            DrawHexagons(window, hexStorage);
 
             window.DispatchEvents();
-            window.Draw(text);
+            DrawUnits(window, Unit.unitList);
             window.Display();
         }
     }
@@ -64,6 +58,7 @@ class Strategos
 
         Hex hex = new Hex(0, 0);
         hexStorage.AddHex(hex);
+        hexList.Add(hex);
 
         /*for (int i = 0; i < 6; i++)
         {
@@ -87,19 +82,27 @@ class Strategos
                 {
                     if (i + j + k == 0)
                     {
-                        Hex hex2 = new Hex(i, j);
-                        hexStorage.AddHex(hex2);
+                        hex = new Hex(i, j);
+                        hexStorage.AddHex(hex);
+                        hexList.Add(hex);
                     }
                 }
             }
         }
-        
+
     }
-    public static void PrintHexagons(RenderWindow window, HexStorage hexStorage)
+    public static void DrawUnits(RenderWindow window, List<Unit> units)
     {
-        for (int k = -100; k < 100; k++)
+        foreach (Unit unit in units)
         {
-            for (int i = -100; i < 100; i++)
+            unit.Draw(window);
+        }
+    }
+    public static void DrawHexagons(RenderWindow window, HexStorage hexStorage)
+    {
+        for (int k = -10; k < 10; k++)
+        {
+            for (int i = -10; i < 10; i++)
             {
                 for (int j = -10; j < 10; j++)
                 {
