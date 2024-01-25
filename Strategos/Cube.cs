@@ -17,7 +17,7 @@ public struct Cube
         Vector2i axial = new Vector2i((int)cube.Q, (int)cube.R);
         return axial;
     }
-    public static Cube AxialToCube(Vector2i hex)
+    public static Cube AxialToCube(Vector2f hex)
     {
         float q = hex.X;
         float r = hex.Y;

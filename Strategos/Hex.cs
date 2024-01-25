@@ -42,7 +42,7 @@ public class Hex
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {
         bool success = false;
-        Cube cube = Cube.Add(Cube.AxialToCube(new Vector2i(Q, R)), Cube.GetDirection(direction));
+        Cube cube = Cube.Add(Cube.AxialToCube(new Vector2f(Q, R)), Cube.GetDirection(direction));
         if (GetFromCube(cube, hexStorage) != null)
         {
             return true;
@@ -66,7 +66,7 @@ public class Hex
         float q = (((root / 3f * pixel.X) - (1f / 3f) * pixel.Y) / size);
         float r = ((2f / 3f) * pixel.Y) / size;
 
-        Cube cube = Cube.CubeRound(Cube.AxialToCube(new Vector2i((int)q, (int)r)));
+        Cube cube = Cube.CubeRound(Cube.AxialToCube(new Vector2f(q, r)));
 
         return cube;
     }
