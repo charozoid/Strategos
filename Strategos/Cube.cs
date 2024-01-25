@@ -1,6 +1,6 @@
 ﻿using SFML.System;
 
-public class Cube
+public struct Cube
 {
     public float Q { get; set; }
     public float R { get; set; }
@@ -77,19 +77,6 @@ public class Cube
         }
         return results;
     }
-    public override bool Equals(object obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-        Cube otherCube = (Cube)obj;
-        return Q == otherCube.Q && R == otherCube.R && S == otherCube.S;
-    }
-    public override int GetHashCode()
-    {
-        return (Q, R, S).GetHashCode();
-    }
     public static Cube CubeRound(Cube cube)
     {
         float q = MathF.Round(cube.Q);
@@ -145,7 +132,7 @@ public class Cube
         List<Cube> path = new List<Cube>();
         Cube current = target;
 
-        while (current != start)
+        while (!current.Equals(start))
         {
             path.Add(current);
             current = cameFrom[current];
