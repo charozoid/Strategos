@@ -39,6 +39,16 @@ public class Hex
         tileIntRect.Add(TileType.Grass, new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT + 10));
         tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT + 10));
     }
+    public bool HasNeighbor(Direction direction, HexStorage hexStorage)
+    {
+        bool success = false;
+        Cube cube = Cube.Add(Cube.AxialToCube(new Vector2f(Q, R)), Cube.GetDirection(direction));
+        if (GetFromCube(cube, hexStorage) != null)
+        {
+            return true;
+        }
+        return success;
+    }
     public static Hex GetFromCube(Cube cube, HexStorage hexStorage)
     {
         Vector2i axial = Cube.CubeToAxial(cube);
@@ -61,8 +71,6 @@ public class Hex
         return cube;
     }
 
-
-
     public static Vector2f CubeToPixel(Cube hex)
     {
         float x = (Strategos.TILE_HEIGHT / 2f) * (Strategos.ROOTOFTHREE * hex.Q + (Strategos.ROOTOFTHREE / 2 * hex.R)) ;
@@ -73,7 +81,6 @@ public class Hex
     {
         return (int)((Math.Abs(a.Q - b.Q) + Math.Abs(a.R - b.R) + Math.Abs(a.S - b.S)) / 2);
     }
-
     public void Draw(RenderWindow window)
     {     
         window.Draw(Sprite);

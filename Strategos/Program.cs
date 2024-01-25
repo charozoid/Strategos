@@ -61,20 +61,6 @@ class Strategos
         hexStorage.AddHex(hex);
         hexList.Add(hex);
 
-        /*for (int i = 0; i < 6; i++)
-        {
-            Direction direction = (Direction)i;
-            Cube neighborCube = Cube.CubeNeighbor(Cube.AxialToCube(new Vector2f(hex.Q, hex.R)), direction);
-            Hex neighbor = new Hex((int)neighborCube.Q, (int)neighborCube.R);
-            hexStorage.AddHex(neighbor);
-            for (int j= 0; j < 6; j++)
-            {
-                Direction direction2 = (Direction)j;
-                Cube neighborCube2 = Cube.CubeNeighbor(Cube.AxialToCube(new Vector2f(neighbor.Q, neighbor.R)), direction2);
-                Hex neighbor2 = new Hex((int)neighborCube2.Q, (int)neighborCube2.R);
-                hexStorage.AddHex(neighbor2);
-            }
-        }*/
         for (int i = -radius; radius > i; i++)
         {
             for (int j = -radius; radius > j; j++)
@@ -90,7 +76,7 @@ class Strategos
                 }
             }
         }
-
+        hexStorage.UpdateMinMax();
     }
     public static void DrawUnits(RenderWindow window, List<Unit> units)
     {
@@ -101,11 +87,11 @@ class Strategos
     }
     public static void DrawHexagons(RenderWindow window, HexStorage hexStorage)
     {
-        for (int k = -10; k < 10; k++)
+        for (int k = hexStorage.minR; k < hexStorage.maxR; k++)
         {
-            for (int i = -10; i < 10; i++)
+            for (int i = hexStorage.minQ; i < hexStorage.maxQ; i++)
             {
-                for (int j = -10; j < 10; j++)
+                for (int j = hexStorage.minR; j < hexStorage.maxR; j++)
                 {
                     Hex hex = hexStorage.GetHex(i, j, -i - j);
                     if (hex != null && hex.R == k)
@@ -115,6 +101,5 @@ class Strategos
                 }
             }
         }
-
     }
 }
