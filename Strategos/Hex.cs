@@ -5,7 +5,7 @@ public class Hex
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
-    private TileType _type = TileType.Grass;
+    private TileType _type = TileType.Water;
     public TileType Type {
         get {return _type; }
         set {SetType(value); } 
@@ -26,7 +26,7 @@ public class Hex
         Sprite = new Sprite(Strategos.tileTexture);
         Sprite.TextureRect = tileIntRect[Type];
         Sprite.Origin = new Vector2f(0, 0);
-        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2 );
+        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2);
         
         DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
         DebugText.Position = Sprite.Position + new Vector2f(5, 40);
@@ -43,8 +43,9 @@ public class Hex
         directionDictionary.Add(Direction.W, new Cube(-1, 0, 1));
 
         tileIntRect = new Dictionary<TileType, IntRect>();
-        tileIntRect.Add(TileType.Grass, new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT + 10));
-        tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT + 10));
+        tileIntRect.Add(TileType.Grass, new IntRect(Strategos.TILE_WIDTH * 0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT));
+        tileIntRect.Add(TileType.Mountain, new IntRect(Strategos.TILE_WIDTH * 1, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT));
+        tileIntRect.Add(TileType.Water, new IntRect(Strategos.TILE_WIDTH * 2, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT));
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {

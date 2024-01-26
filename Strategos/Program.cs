@@ -13,7 +13,7 @@ class Strategos
     public const int CHARACTER_WIDTH = 22;
     public const int CHARACTER_HEIGHT = 52;
 
-    public const float ROOTOFTHREE = 1.732f;
+    public const float ROOTOFTHREE = 1.732050807f;
     public const float CAMERA_SPEED = 200.0f;
     public const float ZOOM_SPEED = 1.1f;
 
