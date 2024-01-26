@@ -13,19 +13,19 @@ public class InputHandler
     {
         if (e.Code == Keyboard.Key.W)
         {
-            view.Center += new Vector2f(0, - Strategos.cameraSpeed);
+            view.Center += new Vector2f(0, - Strategos.CAMERA_SPEED);
         }
         if (e.Code == Keyboard.Key.S)
         {
-            view.Center += new Vector2f(0, Strategos.cameraSpeed);
+            view.Center += new Vector2f(0, Strategos.CAMERA_SPEED);
         }
         if (e.Code == Keyboard.Key.A)
         {
-            view.Center += new Vector2f(-Strategos.cameraSpeed, 0);
+            view.Center += new Vector2f(-Strategos.CAMERA_SPEED, 0);
         }
         if (e.Code == Keyboard.Key.D)
         {
-            view.Center += new Vector2f(Strategos.cameraSpeed, 0);
+            view.Center += new Vector2f(Strategos.CAMERA_SPEED, 0);
         }
     }
 
@@ -63,7 +63,7 @@ public class InputHandler
         }
         if (e.Button == Mouse.Button.Middle)
         {
-            Hex.GetFromCube(cube, hexStorage).SetType(TileType.Grass);
+            Hex.GetFromCube(cube, hexStorage).Type = TileType.Mountain;
         }
     }
     public static void MouseButtonReleased(object sender, MouseButtonEventArgs e, HexStorage hexStorage)
@@ -84,11 +84,11 @@ public class InputHandler
     {
         if (e.Delta > 0)
         {
-            view.Zoom(1 / Strategos.zoomSpeed);
+            view.Zoom(1 / Strategos.ZOOM_SPEED);
         }
         else
         {
-            view.Zoom(Strategos.zoomSpeed);
+            view.Zoom(Strategos.ZOOM_SPEED);
         }
     }
 

@@ -5,12 +5,16 @@ public struct Cube
     public float Q { get; set; }
     public float R { get; set; }
     public float S { get; set; }
-
+    public static Clock clock = new Clock();
     public Cube(float q, float r, float s)
     {
         Q = q;
         R = r;
         S = s;
+    }
+    static Cube()
+    {
+        clock.Restart();
     }
     public static Vector2i CubeToAxial(Cube cube)
     {
@@ -29,6 +33,10 @@ public struct Cube
     {
         return Hex.directionDictionary[direction];
     }
+    public static Cube CubeNeighbor(Cube hex, Direction direction)
+    {
+        return Add(hex, GetDirection(direction));
+    }
     public static Cube Add(Cube hex, Cube vec)
     {
         return new Cube(hex.Q + vec.Q, hex.R + vec.R, hex.S + vec.S);
@@ -37,10 +45,7 @@ public struct Cube
     {
         return new Cube(hex.Q - vec.Q, hex.R - vec.R, hex.S - vec.S);
     }
-    public static Cube CubeNeighbor(Cube hex, Direction direction)
-    {
-        return Add(hex, GetDirection(direction));
-    }
+
     public static int Distance(Cube a, Cube b)
     {
         Cube cube = Subtract(a, b);
@@ -117,7 +122,7 @@ public struct Cube
             foreach (Cube next in CubesInRange(current, 1))
             {
                 Hex hex = Hex.GetFromCube(next, hexStorage);
-                if (hex != null && hex.TileType != TileType.Mountain && !cameFrom.ContainsKey(next))
+                if (hex != null && hex.Type != TileType.Mountain && !cameFrom.ContainsKey(next))
                 {
                     frontier.Enqueue(next);
                     cameFrom[next] = current;
@@ -126,7 +131,32 @@ public struct Cube
         }
         return null;
     }
-
+    public static List<Cube> FindPathVisualised(Cube start, Cube target, HexStorage hexStorage)
+    {
+        Queue<Cube> frontier = new Queue<Cube>();
+        Dictionary<Cube, Cube> cameFrom = new Dictionary<Cube, Cube>();
+        frontier.Enqueue(start);
+        cameFrom[start] = start;
+        while (frontier.Count > 0)
+        {
+            Cube current = frontier.Dequeue();
+            if (current.Equals(target))
+            {
+                return ReconstructPath(cameFrom, start, target);
+            }
+            foreach (Cube next in CubesInRange(current, 1))
+            {
+                Hex hex = Hex.GetFromCube(next, hexStorage);
+                if (hex != null && hex.Type != TileType.Mountain && !cameFrom.ContainsKey(next))
+                {
+                    frontier.Enqueue(next);
+                    cameFrom[next] = current;
+                    Thread.Sleep(200);
+                }
+            }
+        }
+        return null;
+    }
     private static List<Cube> ReconstructPath(Dictionary<Cube, Cube> cameFrom, Cube start, Cube target)
     {
         List<Cube> path = new List<Cube>();
@@ -160,7 +190,7 @@ public struct Cube
                     Hex hex = Hex.GetFromCube(neighbor, hexStorage);
                     if (hex != null)
                     {
-                        if (hex.TileType != TileType.Mountain)
+                        if (hex.Type != TileType.Mountain)
                         {
                             if (!fringes[i].Contains(neighbor))
                             {

@@ -5,9 +5,18 @@ public class Hex
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
-    public TileType TileType { get; set; }
+    private TileType _type = TileType.Grass;
+    public TileType Type {
+        get {return _type; }
+        set {SetType(value); } 
+    }
+    private void SetType(TileType tileType)
+    {
+        _type = tileType;
+        Sprite.TextureRect = tileIntRect[Type];
+    }
     public Sprite Sprite { get; set; }
-    public Text text = new Text("", Strategos.font);
+    public Text DebugText = new Text("", Strategos.font);
     public static Dictionary<Direction, Cube> directionDictionary { get; set; }
     public static Dictionary<TileType, IntRect> tileIntRect { get; set; }
     public Hex(int Q, int R)
@@ -15,15 +24,13 @@ public class Hex
         this.Q = Q;
         this.R = R;
         Sprite = new Sprite(Strategos.tileTexture);
-        TileType = TileType.Mountain;
-        Sprite.TextureRect = tileIntRect[TileType];
+        Sprite.TextureRect = tileIntRect[Type];
         Sprite.Origin = new Vector2f(0, 0);
         Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2 );
-        text = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
-        text.Position = Sprite.Position + new Vector2f(5, 40);
-        text.FillColor = Color.Black;
-        text.FillColor = Color.Black;
         
+        DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
+        DebugText.Position = Sprite.Position + new Vector2f(5, 40);
+        DebugText.FillColor = Color.Black;    
     }
     static Hex()
     {
@@ -54,11 +61,7 @@ public class Hex
         Vector2i axial = Cube.CubeToAxial(cube);
         return hexStorage.GetHex(axial.X, axial.Y, -axial.X - axial.Y);
     }
-    public void SetType(TileType tileType)
-    {
-        TileType = tileType;
-        Sprite.TextureRect = tileIntRect[TileType];
-    }
+
     public static Cube PixelToCube(Vector2f pixel)
     {
         float size = Strategos.TILE_HEIGHT / 2;
