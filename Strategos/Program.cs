@@ -7,8 +7,8 @@ class Strategos
     public const int WINDOW_WIDTH = 1600;
     public const int WINDOW_HEIGHT = 900;
 
-    public const int TILE_WIDTH = 97;
-    public const int TILE_HEIGHT = 113;
+    public const int TILE_WIDTH = 95;
+    public const int TILE_HEIGHT = 111;
 
     public const int CHARACTER_WIDTH = 22;
     public const int CHARACTER_HEIGHT = 52;
@@ -37,11 +37,11 @@ class Strategos
         window.SetFramerateLimit(60);
         window.SetVerticalSyncEnabled(true);
 
-        CreateHexagonsCircle(hexStorage, 5);
+        CreateHexagonsCircle(hexStorage, 10);
         while (window.IsOpen)
         {
             window.SetView(view);
-            window.Clear(Color.Black);
+            window.Clear(Color.White);
 
             DrawHexagons(window, hexStorage);
             DrawUnits(window, Unit.unitList);
