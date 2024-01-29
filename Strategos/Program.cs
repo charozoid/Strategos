@@ -22,7 +22,7 @@ class Strategos
     public static Font font = new Font("../../Assets/arial.ttf");
     public static void Main(string[] args)
     {
-        RenderWindow window = new RenderWindow(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Strategos");
+        RenderWindow window = new RenderWindow(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Strategos", Styles.Default);
         VideoMode videoMode = new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
         View view = new View(new FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
         HexStorage hexStorage = new HexStorage();
@@ -37,7 +37,7 @@ class Strategos
         window.SetFramerateLimit(60);
         window.SetVerticalSyncEnabled(true);
 
-        CreateHexagonsCircle(hexStorage, 10);
+        MapGenerator.CreateHexagonsCircle(hexStorage, 10);
         while (window.IsOpen)
         {
             window.SetView(view);
@@ -50,28 +50,7 @@ class Strategos
             window.Display();
         }
     }
-    public static void CreateHexagonsCircle(HexStorage hexStorage, int radius)
-    {
 
-        Hex hex = new Hex(0, 0);
-        hexStorage.AddHex(hex);
-
-        for (int i = -radius; radius > i; i++)
-        {
-            for (int j = -radius; radius > j; j++)
-            {
-                for (int k = -radius; radius > k; k++)
-                {
-                    if (i + j + k == 0)
-                    {
-                        hex = new Hex(i, j);
-                        hexStorage.AddHex(hex);
-                    }
-                }
-            }
-        }
-        hexStorage.UpdateMinMax();
-    }
     public static void DrawUnits(RenderWindow window, List<Unit> units)
     {
         foreach (Unit unit in units)

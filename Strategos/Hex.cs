@@ -5,7 +5,7 @@ public class Hex
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
-    private TileType _type = TileType.Water;
+    private TileType _type = TileType.Grass;
     public TileType Type {
         get {return _type; }
         set {SetType(value); } 
@@ -44,7 +44,7 @@ public class Hex
 
         tileIntRect = new Dictionary<TileType, IntRect>();
         tileIntRect.Add(TileType.Grass, new IntRect(0, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
-        tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT));
+        tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
         tileIntRect.Add(TileType.Water, new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
