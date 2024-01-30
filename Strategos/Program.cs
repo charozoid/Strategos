@@ -67,7 +67,7 @@ partial class Strategos
         window.SetFramerateLimit(60);
         window.SetVerticalSyncEnabled(true);
 
-        MapGenerator.GenerateHexes(hexStorage, 10);
+        MapGenerator.GenerateHexes(hexStorage, 30);
         while (window.IsOpen)
         {
             window.SetView(view);
