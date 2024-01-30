@@ -40,6 +40,7 @@ public class InputHandler
         if (e.Code == Keyboard.Key.Delete)
         {
             hexStorage.Clear();
+            MapGenerator.GenerateHexes(hexStorage, 10);
         }
         if (e.Code == Keyboard.Key.Insert)
         {

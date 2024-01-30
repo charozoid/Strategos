@@ -4,8 +4,8 @@ using SFML.System;
 
 partial class Strategos
 {
-    public const int WINDOW_WIDTH = 1600;
-    public const int WINDOW_HEIGHT = 900;
+    public const int WINDOW_WIDTH = 1366;
+    public const int WINDOW_HEIGHT = 768;
 
     public const int TILE_WIDTH = 95;
     public const int TILE_HEIGHT = 111;
@@ -97,6 +97,8 @@ partial class Strategos
                         break;
                 }
             }
+
+            window.SetView(view);
 
             window.DispatchEvents();
             window.Display();

@@ -10,7 +10,7 @@ public class MapGenerator
     
     private static Dictionary<double, TileType> tileNoiseLookup = new Dictionary<double, TileType>
     {
-        {0.55, TileType.Grass},
+        {0.80, TileType.Grass},
         {1.00, TileType.Water},
     };
 

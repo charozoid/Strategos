@@ -131,32 +131,6 @@ public struct Cube
         }
         return null;
     }
-    public static List<Cube> FindPathVisualised(Cube start, Cube target, HexStorage hexStorage)
-    {
-        Queue<Cube> frontier = new Queue<Cube>();
-        Dictionary<Cube, Cube> cameFrom = new Dictionary<Cube, Cube>();
-        frontier.Enqueue(start);
-        cameFrom[start] = start;
-        while (frontier.Count > 0)
-        {
-            Cube current = frontier.Dequeue();
-            if (current.Equals(target))
-            {
-                return ReconstructPath(cameFrom, start, target);
-            }
-            foreach (Cube next in CubesInRange(current, 1))
-            {
-                Hex hex = Hex.GetFromCube(next, hexStorage);
-                if (hex != null && hex.Type != TileType.Mountain && !cameFrom.ContainsKey(next))
-                {
-                    frontier.Enqueue(next);
-                    cameFrom[next] = current;
-                    Thread.Sleep(200);
-                }
-            }
-        }
-        return null;
-    }
     private static List<Cube> ReconstructPath(Dictionary<Cube, Cube> cameFrom, Cube start, Cube target)
     {
         List<Cube> path = new List<Cube>();

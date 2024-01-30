@@ -94,6 +94,6 @@ public class Hex
     public void Draw(RenderWindow window)
     {     
         window.Draw(Sprite);
-        //window.Draw(text);
+        window.Draw(DebugText);
     }
 }
