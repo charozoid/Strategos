@@ -122,7 +122,7 @@ public struct Cube
             foreach (Cube next in CubesInRange(current, 1))
             {
                 Hex hex = Hex.GetFromCube(next, hexStorage);
-                if (hex != null && hex.Type != TileType.Mountain && !cameFrom.ContainsKey(next))
+                if (hex != null && Hex.tilePassable[hex.Type] && !cameFrom.ContainsKey(next))
                 {
                     frontier.Enqueue(next);
                     cameFrom[next] = current;

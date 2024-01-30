@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 public class MapGenerator
 {
-    private static PerlinNoise Noise = new PerlinNoise(32);
+    
     private static Dictionary<double, TileType> tileNoiseLookup = new Dictionary<double, TileType>
     {
-        {0.50, TileType.Grass},
-        {0.85, TileType.Water},
-        {0.95, TileType.Mountain }
+        {0.55, TileType.Grass},
+        {1.00, TileType.Water},
     };
 
-    public static void CreateHexagonsCircle(HexStorage hexStorage, int radius)
+    public static void GenerateHexes(HexStorage hexStorage, int radius)
     {
-
+        PerlinNoise Noise = new PerlinNoise(Strategos.noiseRepeat);
+        Random rand = new Random(Strategos.noiseSeed);
         Hex hex = new Hex(0, 0);
         hexStorage.AddHex(hex);
 
@@ -25,20 +25,14 @@ public class MapGenerator
         {
             for (int j = -radius; radius > j; j++)
             {
-                for (int k = -radius; radius > k; k++)
-                {
-                    if (i + j + k == 0)
-                    {
-                        hex = new Hex(i, j);
-                        double noise = Noise.Noise(j, i);
-                        hex.Type = DetermineTileType(noise);
-                        hexStorage.AddHex(hex);
-                    }
-                }
+
+                hex = new Hex(i, j);
+                double noise = Noise.Noise(i, j, rand);
+                hex.Type = DetermineTileType(noise);
+                hexStorage.AddHex(hex);
             }
         }
         hexStorage.UpdateMinMax();
-
     }
     private static TileType DetermineTileType(double noise)
     {

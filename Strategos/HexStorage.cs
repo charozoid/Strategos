@@ -44,5 +44,8 @@ public class HexStorage
             return null;
         }
     }
-
+    public void Clear()
+    {
+        hexes.Clear();
+    }
 }

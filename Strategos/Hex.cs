@@ -19,6 +19,7 @@ public class Hex
     public Text DebugText = new Text("", Strategos.font);
     public static Dictionary<Direction, Cube> directionDictionary { get; set; }
     public static Dictionary<TileType, IntRect> tileIntRect { get; set; }
+    public static Dictionary<TileType, bool> tilePassable { get; set;}
     public Hex(int Q, int R)
     {
         this.Q = Q;
@@ -46,6 +47,11 @@ public class Hex
         tileIntRect.Add(TileType.Grass, new IntRect(0, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
         tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
         tileIntRect.Add(TileType.Water, new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
+
+        tilePassable = new Dictionary<TileType, bool>();
+        tilePassable[TileType.Grass] = true;
+        tilePassable[TileType.Mountain] = false;
+        tilePassable[TileType.Water] = false;
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {

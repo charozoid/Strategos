@@ -13,9 +13,9 @@ public class PerlinNoise
         this.repeat = repeat;
     }
 
-    public double Noise(double x, double y)
+    public double Noise(double x, double y, Random rand)
     {
-        // Compute Perlin noise value here instead of always returning 0.5
+
         double fx = x / repeat;
         double fy = y / repeat;
 
@@ -32,6 +32,7 @@ public class PerlinNoise
         int b = p[ix + 1] + iy;
 
         double result = Lerp(v, Lerp(u, Grad(p[a], fx, fy), Grad(p[b], fx - 1, fy)), Lerp(u, Grad(p[a + 1], fx, fy - 1), Grad(p[b + 1], fx - 1, fy - 1)));
+        result += rand.NextDouble() * 0.7;
         return (result + 1) / 2; // Normalize to [0, 1]
     }
 
