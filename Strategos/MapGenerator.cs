@@ -46,7 +46,7 @@ public class MapGenerator
             int rOffset = random.Next(-5, 5);
             CreateHexCircle(qOffset, rOffset, hexStorage, radius);
         }
-        GenerateWaterInCircle(0, 0, hexStorage, 150);
+        GenerateWaterInCircle(0, 0, hexStorage, 25);
         CreateBeaches(hexStorage);
     }
     public static void GenerateWater(HexStorage hexStorage, int radius)
