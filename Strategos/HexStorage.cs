@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 public class HexStorage
 {
     private Dictionary<(int, int, int), Hex> hexes = new Dictionary<(int, int, int), Hex>();
@@ -38,6 +39,13 @@ public class HexStorage
         }
         hexes[(hex.Q, hex.R, hex.S)] = hex;
     }
+    public void RemoveHex(Hex hex)
+    {
+        if (hexes.ContainsKey((hex.Q, hex.R, hex.S)))
+        {
+            hexes.Remove((hex.Q, hex.R, hex.S));
+        }
+    }
     public Hex GetHex(int q, int r, int s)
     {
         if (hexes.TryGetValue((q, r, s), out Hex hex))
@@ -48,6 +56,22 @@ public class HexStorage
         {
             return null;
         }
+    }
+    public List<Hex> GetHexesWithRCoord(int r)
+    {
+        List<Hex> hexesWithCoordinatesR = hexes
+            .Where(entry => Math.Abs(entry.Key.Item2) == r)
+            .Select(entry => entry.Value)
+            .ToList();
+        return hexesWithCoordinatesR;
+    }
+    public List<Hex> GetHexesWithQCoord(int r)
+    {
+        List<Hex> hexesWithCoordinatesR = hexes
+            .Where(entry => Math.Abs(entry.Key.Item2) == r)
+            .Select(entry => entry.Value)
+            .ToList();
+        return hexesWithCoordinatesR;
     }
     public void Clear()
     {

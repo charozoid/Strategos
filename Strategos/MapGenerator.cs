@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 public class MapGenerator
 {
-
+    private const int MAP_HEIGHT = 15;
+    private const int MAP_WIDTH = 25;
     private static Dictionary<double, TileType> tileNoiseLookup = new Dictionary<double, TileType>
     {
         {0.25, TileType.Grass},
@@ -55,7 +56,6 @@ public class MapGenerator
         Random rand = new Random(Strategos.noiseSeed);
         Hex hex = new Hex(0, 0);
         hexStorage.AddHex(hex);
-
         for (int i = -radius; radius > i; i++)
         {
             for (int j = -radius; radius > j; j++)
@@ -65,6 +65,9 @@ public class MapGenerator
                 hexStorage.AddHex(hex);
             }
         }
+        
+
+
         hexStorage.UpdateMinMax();
     }
     public static void CreateHexCircle(int q, int r, HexStorage hexStorage, int radius)
@@ -98,7 +101,34 @@ public class MapGenerator
             hex.Type = TileType.Water;
             hexStorage.AddHex(hex);
         }
+        TrimTopAndBottom(hexStorage);
+        //TrimLeftAndRight(hexStorage);
         hexStorage.UpdateMinMax();
+    }
+    private static void TrimLeftAndRight(HexStorage hexStorage)
+    {
+        for (int r = 10; r > 0; r--)
+        {
+            for (int q = 0; q < 10 && r % 2 == 0; q++)
+            {
+                Hex hexToRemove = hexStorage.GetHex(q, r, -q - r);
+                if (hexToRemove != null)
+                {
+                    hexStorage.RemoveHex(hexToRemove);
+                }
+            }
+        }
+    }
+    private static void TrimTopAndBottom(HexStorage hexStorage)
+    {
+        for (int i = 25; i > 20; i--)
+        {
+            List<Hex> hexesToRemove = hexStorage.GetHexesWithRCoord(i);
+            foreach (Hex hexToRemove in hexesToRemove)
+            {
+                hexStorage.RemoveHex(hexToRemove);
+            }
+        }
     }
     private static TileType DetermineTileType(double noise)
     {
