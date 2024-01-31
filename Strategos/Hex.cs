@@ -16,7 +16,7 @@ public class Hex
         Sprite.TextureRect = tileIntRect[Type];
     }
     public Sprite Sprite { get; set; }
-    public Text DebugText = new Text("", Strategos.font);
+    //public Text DebugText = new Text("", Strategos.font);
     public static Dictionary<Direction, Cube> directionDictionary { get; set; }
     public static Dictionary<TileType, IntRect> tileIntRect { get; set; }
     public static Dictionary<TileType, bool> tilePassable { get; set;}
@@ -29,29 +29,31 @@ public class Hex
         Sprite.Origin = new Vector2f(0, 0);
         Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2);
         
-        DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
-        DebugText.Position = Sprite.Position + new Vector2f(5, 40);
-        DebugText.FillColor = Color.Black;    
+        //DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
+        //DebugText.Position = Sprite.Position + new Vector2f(5, 40);
+        //DebugText.FillColor = Color.Black;    
     }
     static Hex()
     {
         directionDictionary = new Dictionary<Direction, Cube>();
-        directionDictionary.Add(Direction.NW, new Cube(0, -1, 1));
-        directionDictionary.Add(Direction.NE, new Cube(1, -1, 0));
-        directionDictionary.Add(Direction.E, new Cube(1, 0, -1));
-        directionDictionary.Add(Direction.SE, new Cube(0, 1, -1));
-        directionDictionary.Add(Direction.SW, new Cube(-1, 1, 0));
-        directionDictionary.Add(Direction.W, new Cube(-1, 0, 1));
+        directionDictionary[Direction.NW] =  new Cube(0, -1, 1);
+        directionDictionary[Direction.NE] = new Cube(1, -1, 0);
+        directionDictionary[Direction.E] = new Cube(1, 0, -1);
+        directionDictionary[Direction.SE] = new Cube(0, 1, -1);
+        directionDictionary[Direction.SW] = new Cube(-1, 1, 0);
+        directionDictionary[Direction.W] = new Cube(-1, 0, 1);
 
         tileIntRect = new Dictionary<TileType, IntRect>();
-        tileIntRect.Add(TileType.Grass, new IntRect(0, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
-        tileIntRect.Add(TileType.Mountain, new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
-        tileIntRect.Add(TileType.Water, new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2));
+        tileIntRect[TileType.Grass] = new IntRect(0, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Mountain] = new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Water] = new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Beach] = new IntRect(291, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
 
         tilePassable = new Dictionary<TileType, bool>();
         tilePassable[TileType.Grass] = true;
         tilePassable[TileType.Mountain] = false;
         tilePassable[TileType.Water] = false;
+        tilePassable[TileType.Beach] = true;
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {
@@ -68,7 +70,6 @@ public class Hex
         Vector2i axial = Cube.CubeToAxial(cube);
         return hexStorage.GetHex(axial.X, axial.Y, -axial.X - axial.Y);
     }
-
     public static Cube PixelToCube(Vector2f pixel)
     {
         float size = Strategos.TILE_HEIGHT / 2;
@@ -95,5 +96,11 @@ public class Hex
     {     
         window.Draw(Sprite);
         //window.Draw(DebugText);
+    }
+
+    public Hex GetNeighbor(Direction direction, HexStorage hexStorage)
+    {
+        Cube cube = Cube.CubeNeighbor(Cube.AxialToCube(new Vector2f(Q, R)), direction);
+        return GetFromCube(cube, hexStorage);
     }
 }

@@ -2,6 +2,7 @@
 public class HexStorage
 {
     private Dictionary<(int, int, int), Hex> hexes = new Dictionary<(int, int, int), Hex>();
+    public Dictionary<(int, int, int), Hex> Hexes { get { return hexes; }  }
     public int maxQ { get; set; }
     public int maxR { get; set; }
     public int maxS { get; set; }
@@ -31,6 +32,10 @@ public class HexStorage
     }
     public void AddHex(Hex hex)
     {
+        if (hexes.ContainsKey((hex.Q, hex.R, hex.S)))
+        {
+            return;
+        }
         hexes[(hex.Q, hex.R, hex.S)] = hex;
     }
     public Hex GetHex(int q, int r, int s)
@@ -47,5 +52,15 @@ public class HexStorage
     public void Clear()
     {
         hexes.Clear();
+    }
+    public void ClearLand()
+    {
+        foreach (var key in hexes.Keys)
+        {
+            if (hexes[key].Type != TileType.Water)
+            {
+                hexes[key].Type = TileType.Water;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿public enum TileType{
     Grass,
     Mountain,
-    Water
+    Water,
+    Beach
 }

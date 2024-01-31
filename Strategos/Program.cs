@@ -22,7 +22,7 @@ partial class Strategos
     public static Font font = new Font("../../Assets/arial.ttf");
 
     public static int noiseSeed = 11111;
-    public static int noiseRepeat = 20;
+    public static int noiseRepeat = 80;
     public static double grassRatio = 0.45;
     public static double waterRatio = 1.00;
 
@@ -67,7 +67,7 @@ partial class Strategos
         window.SetFramerateLimit(60);
         window.SetVerticalSyncEnabled(true);
 
-        MapGenerator.GenerateHexes(hexStorage, 30);
+        MapGenerator.GenerateHexesSplats(hexStorage);
         while (window.IsOpen)
         {
             window.SetView(view);

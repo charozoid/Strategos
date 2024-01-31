@@ -8,14 +8,15 @@ public class PerlinNoise
 {
     private int repeat;
 
+    public List<double> NoiseList { get; set; }
     public PerlinNoise(int repeat)
     {
         this.repeat = repeat;
+        NoiseList = new List<double>();
     }
 
     public double Noise(double x, double y, Random rand)
     {
-
         double fx = x / repeat;
         double fy = y / repeat;
 
@@ -28,12 +29,35 @@ public class PerlinNoise
         double u = Fade(fx);
         double v = Fade(fy);
 
-        int a = p[ix] + iy;
-        int b = p[ix + 1] + iy;
+        double result = 0;
+        double amplitude = 1.0;
+        double totalAmplitude = 0;
 
-        double result = Lerp(v, Lerp(u, Grad(p[a], fx, fy), Grad(p[b], fx - 1, fy)), Lerp(u, Grad(p[a + 1], fx, fy - 1), Grad(p[b + 1], fx - 1, fy - 1)));
+        for (int octave = 0; octave < 4; octave++)  // Adjust the number of octaves as needed
+        {
+            int a = p[ix] + iy;
+            int b = p[ix + 1] + iy;
+
+            result += amplitude * Lerp(v, Lerp(u, Grad(p[a], fx, fy), Grad(p[b], fx - 1, fy)),
+                                            Lerp(u, Grad(p[a + 1], fx, fy - 1), Grad(p[b + 1], fx - 1, fy - 1)));
+
+            // Adjust the amplitude and frequency for the next octave
+            amplitude *= 0.5;  // Adjust as needed
+            totalAmplitude += amplitude;
+            fx *= 2;
+            fy *= 2;
+            ix = (int)Math.Floor(fx) & 255;
+            iy = (int)Math.Floor(fy) & 255;
+            fx -= Math.Floor(fx);
+            fy -= Math.Floor(fy);
+        }
+
         result += rand.NextDouble() * 0.1f;
-        return (result + 1) / 2; // Normalize to [0, 1]
+
+        result /= totalAmplitude; // Normalize to [0, 1]
+        result = Math.Abs(result);
+        NoiseList.Add(result);
+        return Math.Clamp(result, 0, 1); // Normalize to [0, 1]
     }
 
     public int Inc(int num)
