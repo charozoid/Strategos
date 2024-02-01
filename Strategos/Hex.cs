@@ -1,11 +1,13 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+
 public class Hex
 {
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
     private TileType _type = TileType.Grass;
+    public Region Region { get; set; }
     public TileType Type {
         get {return _type; }
         set {SetType(value); } 
@@ -48,12 +50,14 @@ public class Hex
         tileIntRect[TileType.Mountain] = new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
         tileIntRect[TileType.Water] = new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
         tileIntRect[TileType.Beach] = new IntRect(291, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Snow] = new IntRect(388, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
 
         tilePassable = new Dictionary<TileType, bool>();
         tilePassable[TileType.Grass] = true;
         tilePassable[TileType.Mountain] = false;
         tilePassable[TileType.Water] = false;
         tilePassable[TileType.Beach] = true;
+        tilePassable[TileType.Snow] = true;
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {
@@ -64,6 +68,20 @@ public class Hex
             return true;
         }
         return success;
+    }
+    public List<Hex> GetNeighbors(HexStorage hexStorage)
+    {
+        List<Hex> neighbors = new List<Hex>();
+        foreach (var direction in directionDictionary)
+        {
+            Cube cube = Cube.Add(Cube.AxialToCube(new Vector2f(Q, R)), direction.Value);
+            Hex neighbor = GetFromCube(cube, hexStorage);
+            if (neighbor != null)
+            {
+                neighbors.Add(neighbor);
+            }
+        }
+        return neighbors;
     }
     public static Hex GetFromCube(Cube cube, HexStorage hexStorage)
     {

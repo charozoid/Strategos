@@ -40,7 +40,9 @@ public class InputHandler
         if (e.Code == Keyboard.Key.Delete)
         {
             hexStorage.Clear();
-            MapGenerator.GenerateHexesSplats(hexStorage);
+            MapGenerator.GenerateMap(hexStorage);
+            Strategos.regions = Region.GenerateRegions(hexStorage);
+            MapGenerator.CreateBeaches(hexStorage);
         }
         if (e.Code == Keyboard.Key.Insert)
         {

@@ -2,5 +2,6 @@
     Grass,
     Mountain,
     Water,
-    Beach
+    Beach,
+    Snow
 }

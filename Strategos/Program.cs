@@ -28,6 +28,8 @@ partial class Strategos
 
     public static bool isInputBoxActive = false;
     public static ConfigValue ConfigValue = ConfigValue.NoiseSeed;
+
+    public static List<Region> regions = new List<Region>();
     public static void Main(string[] args)
     {
         RenderWindow window = new RenderWindow(new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Strategos", Styles.Default);
@@ -67,7 +69,18 @@ partial class Strategos
         window.SetFramerateLimit(60);
         window.SetVerticalSyncEnabled(true);
 
-        MapGenerator.GenerateHexesSplats(hexStorage);
+        MapGenerator.GenerateMap(hexStorage);
+        regions = Region.GenerateRegions(hexStorage);
+        /*Random rand = new Random();
+        foreach (Region region in regions)
+        {
+            int r = rand.Next(125, 255);
+            int b = rand.Next(125, 255);
+            foreach (Hex hex in region.Hexes)
+            {
+                hex.Sprite.Color = new Color((byte)r, 0, (byte)b);
+            }
+        }*/
         while (window.IsOpen)
         {
             window.SetView(view);
@@ -100,6 +113,7 @@ partial class Strategos
 
             window.SetView(view);
 
+            Region.DrawRegionsText(window, regions);
             window.DispatchEvents();
             window.Display();
         }
