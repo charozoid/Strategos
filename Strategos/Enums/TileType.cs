@@ -3,5 +3,6 @@
     Mountain,
     Water,
     Beach,
-    Snow
+    Snow,
+    Bridge
 }

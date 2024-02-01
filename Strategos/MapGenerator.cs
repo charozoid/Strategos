@@ -2,7 +2,7 @@
 using SFML.Graphics;
 public class MapGenerator
 {
-    private const int POLAR_LIMIT = 18;
+    private const int POLAR_LIMIT = 20;
     private const int MAP_HEIGHT = 25;
     private const int MAP_WIDTH = 25;
     private static Dictionary<double, TileType> tileNoiseLookup = new Dictionary<double, TileType>
@@ -31,13 +31,38 @@ public class MapGenerator
         }
         hexStorage.UpdateMinMax();
     }
+    public static void GenerateBridgeBetweenRegions(HexStorage hexStorage, Region region1, Region region2)
+    {
+        List<Hex> hexes = Region.GetClosestHexesInTwoRegions(hexStorage, region1, region2);
+        Cube start = Cube.AxialToCube(new Vector2f(hexes[0].Q, hexes[0].R));
+        Cube end = Cube.AxialToCube(new Vector2f(hexes[1].Q, hexes[1].R));
+        List<Cube> path = Cube.Linedraw(start, end);
+        foreach (Cube cube in path)
+        {
+            Hex hex = Hex.GetFromCube(cube, hexStorage);
+            hex.Type = TileType.Bridge;
+        }
+    }
+    public static void GenerateBridges(HexStorage hexStorage, List<Region> regionList)
+    {
+
+        foreach (Region region in regionList)
+        {
+            foreach (Region neighbor in regionList)
+            {
+                if (region != neighbor)
+                {
+                    GenerateBridgeBetweenRegions(hexStorage, region, neighbor);
+                }
+            }
+        }
+    }
     public static void GenerateMap(HexStorage hexStorage)
     {
-        GenerateContinent(hexStorage, 0, -15, 8, 8); 
-        GenerateContinent(hexStorage, 5, -15, 8, 4);
-        GenerateContinent(hexStorage, -5, 0, 4, 8);
-        GenerateContinent(hexStorage, 8, 0, 4, 4);
-        GenerateContinent(hexStorage, -2, 15, 4, 4);
+        GenerateContinent(hexStorage, -5, -5, 8, 4);
+        GenerateContinent(hexStorage, 15, -5, 4, 8);
+        GenerateContinent(hexStorage, 15, 0, 4, 4);
+        GenerateContinent(hexStorage, -10, 5, 4, 2);
         GenerateWaterInCircle(0, 0, hexStorage, 25);
 
     }
@@ -55,55 +80,30 @@ public class MapGenerator
             CreateHexCircle(qOffset + q, rOffset + r, hexStorage, radius);
         }
     }
-    public static void GenerateHexesSplats(HexStorage hexStorage)
+    public static void CreateSnowAtPoles(HexStorage hexStorage)
     {
         Random random = new Random();
-
-        int numSplats = random.Next(5, 15);
-        for (int i = 0; i < numSplats; i++)
+        for (int i = 0; i < MAP_HEIGHT + 1; i++)
         {
-            int radius = random.Next(2, 6);
-            int qOffset = random.Next(-10, 10);
-            int rOffset = random.Next(-5, 5);
-            CreateHexCircle(qOffset, rOffset, hexStorage, radius);
-        }
-        GenerateWaterInCircle(0, 0, hexStorage, 25);
-        CreateBeaches(hexStorage);
-    }
-    public static void GenerateWater(HexStorage hexStorage, int radius)
-    {
-        PerlinNoise Noise = new PerlinNoise(Strategos.noiseRepeat);
-        Random rand = new Random(Strategos.noiseSeed);
-        Hex hex = new Hex(0, 0);
-        hexStorage.AddHex(hex);
-        for (int i = -radius; radius > i; i++)
-        {
-            for (int j = -radius; radius > j; j++)
+            List<Hex> hexes = hexStorage.GetHexesWithRCoord(i);
+            foreach (Hex hex in hexes)
             {
-                hex = new Hex(i, j);
-                hex.Type = TileType.Water;
-                hexStorage.AddHex(hex);
+                if (Math.Abs(hex.R) + random.Next(0, 3) > POLAR_LIMIT)
+                {
+                    hex.Type = TileType.Snow;
+                }
             }
         }
-       
-        hexStorage.UpdateMinMax();
     }
     public static void CreateHexCircle(int q, int r, HexStorage hexStorage, int radius)
     {
-        List<Cube> cubes = Cube.CubesInRange(new Cube(q, r, -q -r), radius);
-        //Hex hex = new Hex(r, q);
-        //hex.Type = TileType.Grass;
-        //hexStorage.AddHex(hex);
-
+        List<Cube> cubes = Cube.CubesInRange(new Cube(q, r, -q - r), radius);
+        Random random = new Random();
         foreach (Cube cube in cubes)
         {
             Hex hex = new Hex((int)cube.Q, (int)cube.R);
             hex.Type = TileType.Grass;
-            if (Math.Abs(cube.R) > POLAR_LIMIT)
-            {
-                hex.Type = TileType.Snow;
-            }
-            
+
             hexStorage.AddHex(hex);
         }
         hexStorage.UpdateMinMax();

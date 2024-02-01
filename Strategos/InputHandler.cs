@@ -43,6 +43,8 @@ public class InputHandler
             MapGenerator.GenerateMap(hexStorage);
             Strategos.regions = Region.GenerateRegions(hexStorage);
             MapGenerator.CreateBeaches(hexStorage);
+            MapGenerator.CreateSnowAtPoles(hexStorage);
+            MapGenerator.GenerateBridges(hexStorage, Strategos.regions);
         }
         if (e.Code == Keyboard.Key.Insert)
         {

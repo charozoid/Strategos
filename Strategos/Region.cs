@@ -51,6 +51,26 @@ public class Region
         }
         return region;
     }
+    public static List<Hex> GetClosestHexesInTwoRegions(HexStorage hexStorage, Region region1, Region region2)
+    {
+        List<Hex> closestHexes = new List<Hex>();
+        int distance = int.MaxValue;
+        foreach (Hex hex1 in region1.Hexes)
+        {
+            foreach (Hex hex2 in region2.Hexes)
+            {
+                int newDistance = Hex.Distance(hex1, hex2);
+                if (newDistance < distance)
+                {
+                    distance = newDistance;
+                    closestHexes.Clear();
+                    closestHexes.Add(hex1);
+                    closestHexes.Add(hex2);
+                }
+            }
+        }
+        return closestHexes;
+    }
     public static List<Region> GenerateRegions(HexStorage hexStorage)
     {
         List<Region> regions = new List<Region>();

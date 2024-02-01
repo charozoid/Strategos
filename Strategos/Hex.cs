@@ -51,6 +51,7 @@ public class Hex
         tileIntRect[TileType.Water] = new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
         tileIntRect[TileType.Beach] = new IntRect(291, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
         tileIntRect[TileType.Snow] = new IntRect(388, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Bridge] = new IntRect(0, 113, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
 
         tilePassable = new Dictionary<TileType, bool>();
         tilePassable[TileType.Grass] = true;
@@ -58,6 +59,7 @@ public class Hex
         tilePassable[TileType.Water] = false;
         tilePassable[TileType.Beach] = true;
         tilePassable[TileType.Snow] = true;
+        tilePassable[TileType.Bridge] = true;
     }
     public bool HasNeighbor(Direction direction, HexStorage hexStorage)
     {
