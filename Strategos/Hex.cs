@@ -104,10 +104,9 @@ public class Hex
 
     public static Vector2f CubeToPixel(Cube hex)
     {
-        double sqrt3 = Math.Sqrt(3.0);
-        float x = (float)((sqrt3 * hex.Q + (sqrt3 / 2.0) * hex.R) * (Strategos.TILE_HEIGHT / 2f + -1.4f));
-        float y = (Strategos.TILE_HEIGHT / 2f + 0.8f) * (3f / 2f * hex.R);
-
+        double tileRatio = Strategos.TILE_HEIGHT / Strategos.TILE_WIDTH;
+        double x = tileRatio * (hex.Q + hex.R / 2.0) * Strategos.TILE_WIDTH;
+        double y = (Strategos.TILE_HEIGHT / 2.0) * hex.R * (3.0 / 2.0);
 
         return new Vector2f((float)x, (float)y);
     }

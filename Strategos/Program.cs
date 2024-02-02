@@ -57,7 +57,6 @@ partial class Strategos
         InputBox inputBox = new InputBox(font, 20, ui);
         string enteredString = "";
         
-
         int result = 0;
         window.KeyPressed += (sender, e) =>
         {
