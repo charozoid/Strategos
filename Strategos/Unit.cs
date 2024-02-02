@@ -11,13 +11,14 @@ public class Unit
     Sprite Sprite { get; set; }
     Cube Position { get; set; }
     public static List<Unit> unitList { get; set; }
+    private static Vector2i iconSize = new Vector2i(63, 68);
     public Unit(Cube Position)
     {  
         this.Position = Position;
-        Sprite = new Sprite(Strategos.characterTexture);
-        Sprite.TextureRect = new IntRect(0, 0, Strategos.CHARACTER_WIDTH, Strategos.CHARACTER_HEIGHT);
+        Sprite = new Sprite(Strategos.iconsTexture);
+        Sprite.TextureRect = new IntRect(0, 0, iconSize.X, iconSize.Y);
         Sprite.Origin = new Vector2f(0, 0);
-        Sprite.Position = Hex.CubeToPixel(Position) - new Vector2f(Strategos.CHARACTER_WIDTH / 2, Strategos.CHARACTER_HEIGHT / 2);
+        Sprite.Position = Hex.CubeToPixel(Position) - new Vector2f(iconSize.X / 2, iconSize.Y / 2);
         unitList.Add(this);
     }
     static Unit()

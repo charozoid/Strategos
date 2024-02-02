@@ -29,7 +29,7 @@ public class Hex
         Sprite = new Sprite(Strategos.tileTexture);
         Sprite.TextureRect = tileIntRect[Type];
         Sprite.Origin = new Vector2f(0, 0);
-        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2, Strategos.TILE_HEIGHT / 2);
+        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2f, Strategos.TILE_HEIGHT / 2f);
         
         //DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
         //DebugText.Position = Sprite.Position + new Vector2f(5, 40);
@@ -46,12 +46,12 @@ public class Hex
         directionDictionary[Direction.W] = new Cube(-1, 0, 1);
 
         tileIntRect = new Dictionary<TileType, IntRect>();
-        tileIntRect[TileType.Grass] = new IntRect(0, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
-        tileIntRect[TileType.Mountain] = new IntRect(97, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
-        tileIntRect[TileType.Water] = new IntRect(194, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
-        tileIntRect[TileType.Beach] = new IntRect(291, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
-        tileIntRect[TileType.Snow] = new IntRect(388, 0, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
-        tileIntRect[TileType.Bridge] = new IntRect(0, 113, Strategos.TILE_WIDTH + 2, Strategos.TILE_HEIGHT + 2);
+        tileIntRect[TileType.Grass] = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Mountain] = new IntRect(96, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Water] = new IntRect(192, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Beach] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Snow] = new IntRect(384, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Bridge] = new IntRect(0, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
 
         tilePassable = new Dictionary<TileType, bool>();
         tilePassable[TileType.Grass] = true;
@@ -104,9 +104,12 @@ public class Hex
 
     public static Vector2f CubeToPixel(Cube hex)
     {
-        float x = (Strategos.TILE_HEIGHT / 2f) * (Strategos.ROOTOFTHREE * hex.Q + (Strategos.ROOTOFTHREE / 2 * hex.R)) ;
-        float y = Strategos.TILE_HEIGHT / 2f * (3f / 2f * hex.R);
-        return new Vector2f(x, y);
+        double sqrt3 = Math.Sqrt(3.0);
+        float x = (float)((sqrt3 * hex.Q + (sqrt3 / 2.0) * hex.R) * (Strategos.TILE_HEIGHT / 2f + -1.4f));
+        float y = (Strategos.TILE_HEIGHT / 2f + 0.8f) * (3f / 2f * hex.R);
+
+
+        return new Vector2f((float)x, (float)y);
     }
     public static int Distance(Hex a, Hex b)
     {

@@ -11,21 +11,25 @@ public class InputHandler
     }
     public static void KeyPressed(object sender, KeyEventArgs e, View view, HexStorage hexStorage)
     {
+        Vector2f targetCenter = view.Center;
+        Vector2f currentCenter = view.Center;
+        float smoothingFactor = 0.1f;
+
         if (e.Code == Keyboard.Key.W)
         {
-            view.Center += new Vector2f(0, - Strategos.CAMERA_SPEED);
+            Strategos.isWPressed = true;
         }
         if (e.Code == Keyboard.Key.S)
         {
-            view.Center += new Vector2f(0, Strategos.CAMERA_SPEED);
+            Strategos.isSPressed = true;
         }
         if (e.Code == Keyboard.Key.A)
         {
-            view.Center += new Vector2f(-Strategos.CAMERA_SPEED, 0);
+            Strategos.isAPressed = true;
         }
         if (e.Code == Keyboard.Key.D)
         {
-            view.Center += new Vector2f(Strategos.CAMERA_SPEED, 0);
+            Strategos.isDPressed = true;
         }
         if (e.Code == Keyboard.Key.Q)
         {
@@ -44,31 +48,38 @@ public class InputHandler
             Strategos.regions = Region.GenerateRegions(hexStorage);
             MapGenerator.CreateBeaches(hexStorage);
             MapGenerator.CreateSnowAtPoles(hexStorage);
-            MapGenerator.GenerateBridges(hexStorage, Strategos.regions);
+            //MapGenerator.GenerateBridges(hexStorage, Strategos.regions);
         }
         if (e.Code == Keyboard.Key.Insert)
         {
             //MapGenerator.GenerateHexes(hexStorage, 10);
         }
     }
-
+    public static void KeyReleased(object? sender, KeyEventArgs e)
+    {
+        if (e.Code == Keyboard.Key.W)
+        {
+            Strategos.isWPressed = false;
+        }
+        if (e.Code == Keyboard.Key.S)
+        {
+            Strategos.isSPressed = false;
+        }
+        if (e.Code == Keyboard.Key.A)
+        {
+            Strategos.isAPressed = false;
+        }
+        if (e.Code == Keyboard.Key.D)
+        {
+            Strategos.isDPressed = false;
+        }
+    }
     public static void MouseButtonPressed(object sender, MouseButtonEventArgs e, HexStorage hexStorage)
     {
         RenderWindow window = (RenderWindow)sender;
         Vector2f worldPos = window.MapPixelToCoords(Mouse.GetPosition(window), window.GetView());
         Cube cube = Hex.PixelToCube(new Vector2f(worldPos.X, worldPos.Y));
-        /*if (e.Button == Mouse.Button.Left)
-        {
-            List<Cube> cubes = Cube.Linedraw(cube, new Cube(0, 0, 0));
-            foreach (Cube cubeToChange in cubes)
-            {
-                Hex hexToChange = Hex.GetFromCube(cubeToChange, hexStorage);
-                if (hexToChange != null)
-                {
-                    hexToChange.Sprite.Color = Color.Red;
-                }
-            }
-        }*/
+
         if (e.Button == Mouse.Button.Right)
         {
             cubes = Cube.FindPath(new Cube(0, 0, 0), cube, hexStorage);
@@ -140,4 +151,6 @@ public class InputHandler
             }
         }
     }
+
+
 }

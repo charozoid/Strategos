@@ -7,18 +7,19 @@ partial class Strategos
     public const int WINDOW_WIDTH = 1366;
     public const int WINDOW_HEIGHT = 768;
 
-    public const int TILE_WIDTH = 95;
-    public const int TILE_HEIGHT = 111;
+    public const int TILE_WIDTH = 96;
+    public const int TILE_HEIGHT = 113;
 
     public const int CHARACTER_WIDTH = 22;
     public const int CHARACTER_HEIGHT = 52;
 
-    public const float ROOTOFTHREE = 1.732050807f;
-    public const float CAMERA_SPEED = 200.0f;
+    public static float ROOTOFTHREE = 1.732050807f;
+    public static float cameraSpeed = 500.0f;
     public const float ZOOM_SPEED = 1.1f;
 
     public static Texture tileTexture = new Texture("../../Assets/hex.png");
     public static Texture characterTexture = new Texture("../../Assets/characters.png");
+    public static Texture iconsTexture = new Texture("../../Assets/icons.png");
     public static Font font = new Font("../../Assets/arial.ttf");
 
     public static int noiseSeed = 11111;
@@ -28,6 +29,12 @@ partial class Strategos
 
     public static bool isInputBoxActive = false;
     public static ConfigValue ConfigValue = ConfigValue.NoiseSeed;
+
+    public static bool isWPressed = false;
+    public static bool isSPressed = false;
+    public static bool isAPressed = false;
+    public static bool isDPressed = false;
+
 
     public static List<Region> regions = new List<Region>();
     public static void Main(string[] args)
@@ -60,7 +67,7 @@ partial class Strategos
             }
 
         };
-
+        window.KeyReleased += InputHandler.KeyReleased;
         window.MouseButtonPressed += (sender, e) => InputHandler.MouseButtonPressed(sender, e, hexStorage);
         window.MouseWheelScrolled += (sender, e) => InputHandler.MouseWheelScrolled(sender, e, view);
         window.MouseButtonReleased += (sender, e) => InputHandler.MouseButtonReleased(sender, e, hexStorage);
@@ -112,12 +119,26 @@ partial class Strategos
             }
 
             window.SetView(view);
+            UpdateCamera(view);
 
             Region.DrawRegionsText(window, regions);
             window.DispatchEvents();
             window.Display();
         }
     }
+
+    public static void UpdateCamera(View view)
+    {
+        float smoothing = 0.1f;
+        cameraSpeed = view.Size.X / 6;
+        Vector2f targetCenter = view.Center;
+        Vector2f currentCenter = view.Center;
+        targetCenter += new Vector2f((isDPressed ? cameraSpeed : 0) - (isAPressed ? cameraSpeed : 0), (isSPressed ? cameraSpeed : 0) - (isWPressed ? cameraSpeed : 0));
+        
+        currentCenter = currentCenter + smoothing * (targetCenter - currentCenter);
+        view.Center = currentCenter;
+    }
+
     public static void DrawUnits(RenderWindow window, List<Unit> units)
     {
         foreach (Unit unit in units)
