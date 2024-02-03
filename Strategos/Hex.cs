@@ -85,6 +85,11 @@ public class Hex
         }
         return neighbors;
     }
+    public Hex GetNeighbor(HexStorage hexStorage, Direction direction)
+    {
+        Cube cube = Cube.Add(Cube.AxialToCube(new Vector2f(Q, R)), Cube.GetDirection(direction));
+        return GetFromCube(cube, hexStorage);
+    }
     public static Hex GetFromCube(Cube cube, HexStorage hexStorage)
     {
         Vector2i axial = Cube.CubeToAxial(cube);
@@ -110,11 +115,7 @@ public class Hex
 
         return new Vector2f((float)x, (float)y);
     }
-    public static int Distance(Hex a, Hex b)
-    {
-        return (int)((Math.Abs(a.Q - b.Q) + Math.Abs(a.R - b.R) + Math.Abs(a.S - b.S)) / 2);
-    }
-    public void Draw(RenderWindow window)
+    public virtual void Draw(RenderWindow window)
     {     
         window.Draw(Sprite);
         //window.Draw(DebugText);

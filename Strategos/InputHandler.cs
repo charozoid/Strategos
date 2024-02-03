@@ -45,10 +45,7 @@ public class InputHandler
         {
             hexStorage.Clear();
             MapGenerator.GenerateMap(hexStorage);
-            Strategos.regions = Region.GenerateRegions(hexStorage);
-            MapGenerator.CreateBeaches(hexStorage);
-            MapGenerator.CreateSnowAtPoles(hexStorage);
-            //MapGenerator.GenerateBridges(hexStorage, Strategos.regions);
+            //Bridge.GenerateBridges(hexStorage, Strategos.regions);
         }
         if (e.Code == Keyboard.Key.Insert)
         {
@@ -82,7 +79,7 @@ public class InputHandler
 
         if (e.Button == Mouse.Button.Right)
         {
-            cubes = Cube.FindPath(new Cube(0, 0, 0), cube, hexStorage);
+            cubes = Cube.Linedraw(new Cube(0, 0, 0), cube);
             if (cubes != null)
             {
                 foreach (Cube cubeToChange in cubes)

@@ -5,6 +5,7 @@ public class Region
 {
     public List<Hex> Hexes { get; set; }
     public static string[] RegionNames { get; set; }
+    public bool IsConnected { get; set; }
     string Name { get; set; }
     public Text Text { get; set; }
     public Region(string name, List<Hex> hexes, HexStorage hexStorage)
@@ -59,7 +60,9 @@ public class Region
         {
             foreach (Hex hex2 in region2.Hexes)
             {
-                int newDistance = Hex.Distance(hex1, hex2);
+                Cube cube1 = new Cube(hex1.Q, hex1.R, hex1.S);
+                Cube cube2 = new Cube(hex2.Q, hex2.R, hex2.S);
+                int newDistance = Cube.Distance(cube1, cube2);
                 if (newDistance < distance)
                 {
                     distance = newDistance;

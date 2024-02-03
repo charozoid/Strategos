@@ -2,7 +2,7 @@
 using SFML.Window;
 using SFML.System;
 
-partial class Strategos
+public class Strategos
 {
     public const int WINDOW_WIDTH = 1366;
     public const int WINDOW_HEIGHT = 768;
@@ -19,6 +19,7 @@ partial class Strategos
 
     public static Texture tileTexture = new Texture("../../Assets/hex.png");
     public static Texture characterTexture = new Texture("../../Assets/characters.png");
+    public static Texture bridgesTexture = new Texture("../../Assets/bridges.png");
     public static Texture iconsTexture = new Texture("../../Assets/icons.png");
     public static Font font = new Font("../../Assets/arial.ttf");
 
@@ -147,19 +148,9 @@ partial class Strategos
     }
     public static void DrawHexagons(RenderWindow window, HexStorage hexStorage)
     {
-        for (int k = hexStorage.minR; k < hexStorage.maxR; k++)
+        foreach (Hex hex in hexStorage.Hexes.Values)
         {
-            for (int i = hexStorage.minQ; i < hexStorage.maxQ; i++)
-            {
-                for (int j = hexStorage.minR; j < hexStorage.maxR; j++)
-                {
-                    Hex hex = hexStorage.GetHex(i, j, -i - j);
-                    if (hex != null && hex.R == k)
-                    {
-                        hex.Draw(window);
-                    }
-                }
-            }
+            hex.Draw(window);
         }
     }
 }

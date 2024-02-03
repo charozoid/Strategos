@@ -57,6 +57,11 @@ public class HexStorage
             return null;
         }
     }
+    public void Replace(Hex hex, Hex newHex)
+    {
+        hexes.Remove((hex.Q, hex.R, hex.S));
+        hexes[(hex.Q, hex.R, hex.S)] = newHex;
+    }
     public List<Hex> GetHexesWithRCoord(int r)
     {
         List<Hex> hexesWithCoordinatesR = hexes

@@ -31,32 +31,7 @@ public class MapGenerator
         }
         hexStorage.UpdateMinMax();
     }
-    public static void GenerateBridgeBetweenRegions(HexStorage hexStorage, Region region1, Region region2)
-    {
-        List<Hex> hexes = Region.GetClosestHexesInTwoRegions(hexStorage, region1, region2);
-        Cube start = Cube.AxialToCube(new Vector2f(hexes[0].Q, hexes[0].R));
-        Cube end = Cube.AxialToCube(new Vector2f(hexes[1].Q, hexes[1].R));
-        List<Cube> path = Cube.Linedraw(start, end);
-        foreach (Cube cube in path)
-        {
-            Hex hex = Hex.GetFromCube(cube, hexStorage);
-            hex.Type = TileType.Bridge;
-        }
-    }
-    public static void GenerateBridges(HexStorage hexStorage, List<Region> regionList)
-    {
 
-        foreach (Region region in regionList)
-        {
-            foreach (Region neighbor in regionList)
-            {
-                if (region != neighbor)
-                {
-                    GenerateBridgeBetweenRegions(hexStorage, region, neighbor);
-                }
-            }
-        }
-    }
     public static void GenerateMap(HexStorage hexStorage)
     {
         GenerateContinent(hexStorage, -5, -5, 8, 4);
@@ -64,6 +39,11 @@ public class MapGenerator
         GenerateContinent(hexStorage, 15, 0, 4, 4);
         GenerateContinent(hexStorage, -10, 5, 4, 2);
         GenerateWaterInCircle(0, 0, hexStorage, 25);
+        Strategos.regions = Region.GenerateRegions(hexStorage);
+        CreateBeaches(hexStorage);
+        CreateSnowAtPoles(hexStorage);
+        Bridge.GenerateBridges(hexStorage, Strategos.regions);
+        Bridge.UpdateBridgesSprites(hexStorage);
 
     }
     public static void GenerateContinent(HexStorage hexStorage, int q, int r, int sizeX, int sizeY)
