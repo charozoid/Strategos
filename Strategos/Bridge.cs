@@ -29,6 +29,22 @@ public class Bridge : Hex
         spriteFlagsDict[0b101100] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
         spriteFlagsDict[0b100110] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
         spriteFlagsDict[0b010101] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b010101] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b110010] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);        
+        spriteFlagsDict[0b010110] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b011010] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b010011] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b101001] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b001011] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b011001] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b001101] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT);
+
+        spriteFlagsDict[0b001010] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT);
+
+        spriteFlagsDict[0b101101] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b011011] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b010111] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b110101] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
 
         spriteFlagsDict[0b100000] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT); //W
         spriteFlagsDict[0b010000] = new IntRect(0, 0, TILE_WIDTH, TILE_HEIGHT); //SW
@@ -63,7 +79,7 @@ public class Bridge : Hex
         foreach (Direction direction in Enum.GetValues(typeof(Direction)))
         {
             Hex neighborHex = GetNeighbor(hexStorage, direction);
-            if (neighborHex != null && (neighborHex.Type == TileType.Bridge || neighborHex.Type == TileType.Beach))
+            if (neighborHex != null && (neighborHex.Type == TileType.Bridge || neighborHex.Type != TileType.Water))
             {
                 flag |= 1 << (int)direction;
             }
@@ -76,6 +92,10 @@ public class Bridge : Hex
         Cube start = Cube.AxialToCube(new Vector2f(hexes[0].Q, hexes[0].R));
         Cube end = Cube.AxialToCube(new Vector2f(hexes[1].Q, hexes[1].R));
         List<Cube> path = Cube.Linedraw(start, end);
+        if (path.Count > 10)
+        {
+            return;
+        }
         path.RemoveAt(0);
         path.RemoveAt(path.Count - 1);
         foreach (Cube cube in path)
