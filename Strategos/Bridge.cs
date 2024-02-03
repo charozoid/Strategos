@@ -9,33 +9,33 @@ public class Bridge : Hex
         Type = TileType.Bridge;
         Sprite = new Sprite(Strategos.bridgesTexture);
         Sprite.Origin = new Vector2f(0, 0);
-        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2f, Strategos.TILE_HEIGHT / 2f);
+        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(TILE_WIDTH / 2f, TILE_HEIGHT / 2f);
     }
     /*
     0b W SW SE E NE NW 
     */
     static Bridge()
     {
-        spriteFlagsDict[0b000101] = new IntRect(0, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //NW - E
-        spriteFlagsDict[0b001001] = new IntRect(192, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //NW - SE
-        spriteFlagsDict[0b010010] = new IntRect(192, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //NE - SW
-        spriteFlagsDict[0b100010] = new IntRect(96, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); // NE - W
-        spriteFlagsDict[0b100100] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //W - E
-        spriteFlagsDict[0b010100] = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //SW - E
-        spriteFlagsDict[0b101000] = new IntRect(96, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //W - SE
+        spriteFlagsDict[0b000101] = new IntRect(0, 113, TILE_WIDTH, TILE_HEIGHT); //NW - E
+        spriteFlagsDict[0b001001] = new IntRect(192, 113, TILE_WIDTH, TILE_HEIGHT); //NW - SE
+        spriteFlagsDict[0b010010] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT); //NE - SW
+        spriteFlagsDict[0b100010] = new IntRect(96, 113, TILE_WIDTH, TILE_HEIGHT); // NE - W
+        spriteFlagsDict[0b100100] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT); //W - E
+        spriteFlagsDict[0b010100] = new IntRect(0, 0, TILE_WIDTH, TILE_HEIGHT); //SW - E
+        spriteFlagsDict[0b101000] = new IntRect(96, 0, TILE_WIDTH, TILE_HEIGHT); //W - SE
 
-        spriteFlagsDict[0b110100] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        spriteFlagsDict[0b100101] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        spriteFlagsDict[0b101100] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        spriteFlagsDict[0b100110] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        spriteFlagsDict[0b010101] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        spriteFlagsDict[0b110100] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b100101] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b101100] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b100110] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        spriteFlagsDict[0b010101] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
 
-        spriteFlagsDict[0b100000] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //W
-        spriteFlagsDict[0b010000] = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //SW
-        spriteFlagsDict[0b001000] = new IntRect(96, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //NE
-        spriteFlagsDict[0b000100] = new IntRect(0, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //NW
-        spriteFlagsDict[0b000010] = new IntRect(192, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //SE
-        spriteFlagsDict[0b000001] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT); //SW
+        spriteFlagsDict[0b100000] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT); //W
+        spriteFlagsDict[0b010000] = new IntRect(0, 0, TILE_WIDTH, TILE_HEIGHT); //SW
+        spriteFlagsDict[0b001000] = new IntRect(96, 113, TILE_WIDTH, TILE_HEIGHT); //NE
+        spriteFlagsDict[0b000100] = new IntRect(0, 113, TILE_WIDTH, TILE_HEIGHT); //NW
+        spriteFlagsDict[0b000010] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT); //SE
+        spriteFlagsDict[0b000001] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT); //SW
 
     }
     public static void UpdateBridgesSprites(HexStorage hexStorage)
@@ -46,7 +46,7 @@ public class Bridge : Hex
             {
                 Bridge bridge = (Bridge)hex;
                 int flag = bridge.GetBridgeFlag(hexStorage);
-                IntRect intRect = new IntRect(576, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+                IntRect intRect = new IntRect(576, 0, TILE_WIDTH, TILE_HEIGHT);
                 bridge.Sprite.TextureRect = intRect;
                 if (spriteFlagsDict.TryGetValue(flag, out IntRect value))
                 {

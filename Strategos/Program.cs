@@ -7,12 +7,6 @@ public class Strategos
     public const int WINDOW_WIDTH = 1366;
     public const int WINDOW_HEIGHT = 768;
 
-    public const int TILE_WIDTH = 96;
-    public const int TILE_HEIGHT = 113;
-
-    public const int CHARACTER_WIDTH = 22;
-    public const int CHARACTER_HEIGHT = 52;
-
     public static float ROOTOFTHREE = 1.732050807f;
     public static float cameraSpeed = 500.0f;
     public const float ZOOM_SPEED = 1.1f;
@@ -78,16 +72,7 @@ public class Strategos
 
         MapGenerator.GenerateMap(hexStorage);
         regions = Region.GenerateRegions(hexStorage);
-        /*Random rand = new Random();
-        foreach (Region region in regions)
-        {
-            int r = rand.Next(125, 255);
-            int b = rand.Next(125, 255);
-            foreach (Hex hex in region.Hexes)
-            {
-                hex.Sprite.Color = new Color((byte)r, 0, (byte)b);
-            }
-        }*/
+
         while (window.IsOpen)
         {
             window.SetView(view);

@@ -11,10 +11,6 @@ public class InputHandler
     }
     public static void KeyPressed(object sender, KeyEventArgs e, View view, HexStorage hexStorage)
     {
-        Vector2f targetCenter = view.Center;
-        Vector2f currentCenter = view.Center;
-        float smoothingFactor = 0.1f;
-
         if (e.Code == Keyboard.Key.W)
         {
             Strategos.isWPressed = true;
@@ -45,11 +41,6 @@ public class InputHandler
         {
             hexStorage.Clear();
             MapGenerator.GenerateMap(hexStorage);
-            //Bridge.GenerateBridges(hexStorage, Strategos.regions);
-        }
-        if (e.Code == Keyboard.Key.Insert)
-        {
-            //MapGenerator.GenerateHexes(hexStorage, 10);
         }
     }
     public static void KeyReleased(object? sender, KeyEventArgs e)
@@ -148,6 +139,4 @@ public class InputHandler
             }
         }
     }
-
-
 }

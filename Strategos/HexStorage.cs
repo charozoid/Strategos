@@ -70,26 +70,8 @@ public class HexStorage
             .ToList();
         return hexesWithCoordinatesR;
     }
-    public List<Hex> GetHexesWithQCoord(int r)
-    {
-        List<Hex> hexesWithCoordinatesR = hexes
-            .Where(entry => Math.Abs(entry.Key.Item2) == r)
-            .Select(entry => entry.Value)
-            .ToList();
-        return hexesWithCoordinatesR;
-    }
     public void Clear()
     {
         hexes.Clear();
-    }
-    public void ClearLand()
-    {
-        foreach (var key in hexes.Keys)
-        {
-            if (hexes[key].Type != TileType.Water)
-            {
-                hexes[key].Type = TileType.Water;
-            }
-        }
     }
 }

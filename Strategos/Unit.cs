@@ -3,6 +3,8 @@ using SFML.System;
 
 public class Unit
 {
+    public const int CHARACTER_WIDTH = 22;
+    public const int CHARACTER_HEIGHT = 52;
     int Hp { get; set; }
     int Attack { get; set; }
     int Defense { get; set; }

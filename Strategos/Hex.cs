@@ -3,6 +3,8 @@ using SFML.System;
 
 public class Hex
 {
+    public const int TILE_WIDTH = 96;
+    public const int TILE_HEIGHT = 113;
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
@@ -18,7 +20,6 @@ public class Hex
         Sprite.TextureRect = tileIntRect[Type];
     }
     public Sprite Sprite { get; set; }
-    //public Text DebugText = new Text("", Strategos.font);
     public static Dictionary<Direction, Cube> directionDictionary { get; set; }
     public static Dictionary<TileType, IntRect> tileIntRect { get; set; }
     public static Dictionary<TileType, bool> tilePassable { get; set;}
@@ -29,11 +30,8 @@ public class Hex
         Sprite = new Sprite(Strategos.tileTexture);
         Sprite.TextureRect = tileIntRect[Type];
         Sprite.Origin = new Vector2f(0, 0);
-        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(Strategos.TILE_WIDTH / 2f, Strategos.TILE_HEIGHT / 2f);
-        
-        //DebugText = new Text($"Q:{Q} R:{R} S:{S}", Strategos.font, 12);
-        //DebugText.Position = Sprite.Position + new Vector2f(5, 40);
-        //DebugText.FillColor = Color.Black;    
+        Sprite.Position = CubeToPixel(new Cube(Q, R, S)) - new Vector2f(TILE_WIDTH / 2f, TILE_HEIGHT / 2f);
+  
     }
     static Hex()
     {
@@ -46,12 +44,12 @@ public class Hex
         directionDictionary[Direction.W] = new Cube(-1, 0, 1);
 
         tileIntRect = new Dictionary<TileType, IntRect>();
-        tileIntRect[TileType.Grass] = new IntRect(0, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        tileIntRect[TileType.Mountain] = new IntRect(96, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        tileIntRect[TileType.Water] = new IntRect(192, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        tileIntRect[TileType.Beach] = new IntRect(288, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        tileIntRect[TileType.Snow] = new IntRect(384, 0, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
-        tileIntRect[TileType.Bridge] = new IntRect(0, 113, Strategos.TILE_WIDTH, Strategos.TILE_HEIGHT);
+        tileIntRect[TileType.Grass] = new IntRect(0, 0, TILE_WIDTH, TILE_HEIGHT);
+        tileIntRect[TileType.Mountain] = new IntRect(96, 0, TILE_WIDTH, TILE_HEIGHT);
+        tileIntRect[TileType.Water] = new IntRect(192, 0, TILE_WIDTH, TILE_HEIGHT);
+        tileIntRect[TileType.Beach] = new IntRect(288, 0, TILE_WIDTH, TILE_HEIGHT);
+        tileIntRect[TileType.Snow] = new IntRect(384, 0, TILE_WIDTH, TILE_HEIGHT);
+        tileIntRect[TileType.Bridge] = new IntRect(0, 113, TILE_WIDTH, TILE_HEIGHT);
 
         tilePassable = new Dictionary<TileType, bool>();
         tilePassable[TileType.Grass] = true;
@@ -97,7 +95,7 @@ public class Hex
     }
     public static Cube PixelToCube(Vector2f pixel)
     {
-        float size = Strategos.TILE_HEIGHT / 2;
+        float size = TILE_HEIGHT / 2;
         float root = Strategos.ROOTOFTHREE;
         float q = (((root / 3f * pixel.X) - (1f / 3f) * pixel.Y) / size);
         float r = ((2f / 3f) * pixel.Y) / size;
@@ -106,21 +104,18 @@ public class Hex
 
         return cube;
     }
-
     public static Vector2f CubeToPixel(Cube hex)
     {
-        double tileRatio = Strategos.TILE_HEIGHT / Strategos.TILE_WIDTH;
-        double x = tileRatio * (hex.Q + hex.R / 2.0) * Strategos.TILE_WIDTH;
-        double y = (Strategos.TILE_HEIGHT / 2.0) * hex.R * (3.0 / 2.0);
+        double tileRatio = TILE_HEIGHT / TILE_WIDTH;
+        double x = tileRatio * (hex.Q + hex.R / 2.0) * TILE_WIDTH;
+        double y = (TILE_HEIGHT / 2.0) * hex.R * (3.0 / 2.0);
 
         return new Vector2f((float)x, (float)y);
     }
     public virtual void Draw(RenderWindow window)
     {     
         window.Draw(Sprite);
-        //window.Draw(DebugText);
     }
-
     public Hex GetNeighbor(Direction direction, HexStorage hexStorage)
     {
         Cube cube = Cube.CubeNeighbor(Cube.AxialToCube(new Vector2f(Q, R)), direction);

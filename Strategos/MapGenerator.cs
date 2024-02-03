@@ -10,28 +10,6 @@ public class MapGenerator
         {0.25, TileType.Grass},
         {1.00, TileType.Water},
     };
-
-    public static void GenerateHexesNoise(HexStorage hexStorage, int radius)
-    {
-        PerlinNoise Noise = new PerlinNoise(Strategos.noiseRepeat);
-        Random rand = new Random(Strategos.noiseSeed);
-        Hex hex = new Hex(0, 0);
-        hexStorage.AddHex(hex);
-
-        for (int i = -radius; radius > i; i++)
-        {
-            for (int j = -radius; radius > j; j++)
-            {
-                hex = new Hex(i, j);
-                double noise = Noise.Noise(j * 105, i * 152, rand);
-                noise %= 1.0;
-                hex.Type = DetermineTileType(noise);
-                hexStorage.AddHex(hex);
-            }
-        }
-        hexStorage.UpdateMinMax();
-    }
-
     public static void GenerateMap(HexStorage hexStorage)
     {
         GenerateContinent(hexStorage, -5, -5, 8, 4);
@@ -105,22 +83,7 @@ public class MapGenerator
             hexStorage.AddHex(hex);
         }
         TrimTopAndBottom(hexStorage);
-        //TrimLeftAndRight(hexStorage);
         hexStorage.UpdateMinMax();
-    }
-    private static void TrimLeftAndRight(HexStorage hexStorage)
-    {
-        for (int r = 10; r > 0; r--)
-        {
-            for (int q = 0; q < 10 && r % 2 == 0; q++)
-            {
-                Hex hexToRemove = hexStorage.GetHex(q, r, -q - r);
-                if (hexToRemove != null)
-                {
-                    hexStorage.RemoveHex(hexToRemove);
-                }
-            }
-        }
     }
     private static void TrimTopAndBottom(HexStorage hexStorage)
     {
@@ -132,17 +95,6 @@ public class MapGenerator
                 hexStorage.RemoveHex(hexToRemove);
             }
         }
-    }
-    private static TileType DetermineTileType(double noise)
-    {
-        foreach (KeyValuePair<double, TileType> entry in tileNoiseLookup)
-        {
-            if (noise <= entry.Key)
-            {
-                return entry.Value;
-            }
-        }
-        return TileType.Water;
     }
     public static void CreateBeaches(HexStorage hexStorage)
     {
