@@ -5,6 +5,8 @@ public class Hex
 {
     public const int TILE_WIDTH = 96;
     public const int TILE_HEIGHT = 113;
+    public bool IsDiscoverd { get; set; }
+    public Unit UnitOnTile { get; set; }
     public int Q { get; set; }
     public int R { get; set; }
     public int S { get { return -Q - R; } }
@@ -25,6 +27,7 @@ public class Hex
     public static Dictionary<TileType, bool> tilePassable { get; set;}
     public Hex(int Q, int R)
     {
+        IsDiscoverd = false;
         this.Q = Q;
         this.R = R;
         Sprite = new Sprite(Strategos.tileTexture);
@@ -113,8 +116,11 @@ public class Hex
         return new Vector2f((float)x, (float)y);
     }
     public virtual void Draw(RenderWindow window)
-    {     
-        window.Draw(Sprite);
+    {    
+        if (IsDiscoverd)
+        { 
+            window.Draw(Sprite);
+        }
     }
     public Hex GetNeighbor(Direction direction, HexStorage hexStorage)
     {

@@ -72,7 +72,7 @@ public struct Cube
     {
         return new Cube(FloatLerp(a.Q, b.Q, t), FloatLerp(a.R, b.R, t), FloatLerp(a.S, b.S, t));
     }
-    public static List<Cube> Linedraw(Cube a, Cube b)
+    public static List<Cube> DrawLine(Cube a, Cube b)
     {
         int N = Distance(a, b);
         List<Cube> results = new List<Cube>();

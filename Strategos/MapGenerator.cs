@@ -18,7 +18,7 @@ public class MapGenerator
         GenerateContinent(hexStorage, -10, 5, 4, 2);
         GenerateWaterInCircle(0, 0, hexStorage, 25);
         Strategos.regions = Region.GenerateRegions(hexStorage);
-        CreateBeaches(hexStorage);
+        //CreateBeaches(hexStorage);
         CreateSnowAtPoles(hexStorage);
         Bridge.GenerateBridges(hexStorage, Strategos.regions);
         Bridge.UpdateBridgesSprites(hexStorage);

@@ -30,6 +30,7 @@ public class Strategos
     public static bool isAPressed = false;
     public static bool isDPressed = false;
 
+    public static Unit SelectedUnit { get; set; }
 
     public static List<Region> regions = new List<Region>();
     public static void Main(string[] args)
@@ -39,16 +40,8 @@ public class Strategos
         View view = new View(new FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
         View ui = new View(new FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
         HexStorage hexStorage = new HexStorage();
-        Unit soldier = new Unit(new Cube(0, 0, 0));
-
-        Text seedText = new Text($"Seed: {noiseSeed}", font, 20);
-        seedText.Position = new Vector2f(10, 10);
-        seedText.FillColor = Color.Red;
-
-        Text repeatText = new Text($"Repeat: {noiseRepeat}", font, 20);
-        repeatText.Position = new Vector2f(10, 40);
-        repeatText.FillColor = Color.Red;
-
+        Unit soldier = new Unit(0, 0, 3, 2);
+        Unit soldier2 = new Unit(0, 0, 3, 2);
         InputBox inputBox = new InputBox(font, 20, ui);
         string enteredString = "";
         
@@ -72,7 +65,16 @@ public class Strategos
 
         MapGenerator.GenerateMap(hexStorage);
         regions = Region.GenerateRegions(hexStorage);
-
+        foreach (Hex hex in hexStorage.Hexes.Values)
+        {
+            if (hex.Type == TileType.Grass)
+            {
+                soldier.SetPosition(hexStorage, hex.Q, hex.R);
+                soldier2.SetPosition(hexStorage, hex.Q + 1, hex.R);
+                break;
+            }
+        }
+        view.Center = soldier.Sprite.Position;
         while (window.IsOpen)
         {
             window.SetView(view);
@@ -82,9 +84,8 @@ public class Strategos
             DrawUnits(window, Unit.unitList);
 
             window.SetView(ui);
-            window.Draw(seedText);
-            window.Draw(repeatText);
-            if (isInputBoxActive)
+
+            /*if (isInputBoxActive)
             {
                 switch (ConfigValue)
                 {
@@ -101,7 +102,7 @@ public class Strategos
                         repeatText.DisplayedString = $"Repeat: {noiseRepeat}";
                         break;
                 }
-            }
+            }*/
 
             window.SetView(view);
             UpdateCamera(view);
@@ -130,12 +131,58 @@ public class Strategos
         {
             unit.Draw(window);
         }
+        foreach (Sprite sprite in Unit.MovementRangeSprite)
+        {
+            window.Draw(sprite);
+        }
     }
     public static void DrawHexagons(RenderWindow window, HexStorage hexStorage)
     {
         foreach (Hex hex in hexStorage.Hexes.Values)
         {
             hex.Draw(window);
+        }
+    }
+    public static void UpdateFogOfWar(HexStorage hexStorage)
+    {
+        ResetTilesColorWhenOutOfView(hexStorage);
+        foreach (Unit unit in Unit.unitList)
+        {
+            Cube unitPos = new Cube(unit.Q, unit.R, -unit.Q - unit.R);
+            List<Cube> cubes = Cube.CubesInRange(unitPos, unit.ViewRange);
+            foreach (Cube cube in cubes)
+            {
+                int distance = Cube.Distance(cube, unitPos);
+                if (Cube.Distance(unitPos, cube) == 1)
+                {
+                    Hex hex = Hex.GetFromCube(cube, hexStorage);
+                    if (hex != null)
+                    {
+                        hex.Sprite.Color = new Color(255, 255, 255);
+                    }
+                    continue;
+                }
+                List<Cube> line = Cube.DrawLine(unitPos, cube);
+                foreach (Cube c in line)
+                {
+                    Hex hex = Hex.GetFromCube(c, hexStorage);
+                    if (hex == null || hex.Type == TileType.Mountain)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        hex.Sprite.Color = new Color(255, 255, 255);
+                    }
+                }
+            }
+        }
+    }
+    public static void ResetTilesColorWhenOutOfView(HexStorage hexStorage)
+    {
+        foreach (Hex hex in hexStorage.Hexes.Values)
+        {
+            hex.Sprite.Color = new Color(150, 150, 150);
         }
     }
 }

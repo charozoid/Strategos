@@ -91,7 +91,7 @@ public class Bridge : Hex
         List<Hex> hexes = Region.GetClosestHexesInTwoRegions(hexStorage, region1, region2);
         Cube start = Cube.AxialToCube(new Vector2f(hexes[0].Q, hexes[0].R));
         Cube end = Cube.AxialToCube(new Vector2f(hexes[1].Q, hexes[1].R));
-        List<Cube> path = Cube.Linedraw(start, end);
+        List<Cube> path = Cube.DrawLine(start, end);
         if (path.Count > 10)
         {
             return;

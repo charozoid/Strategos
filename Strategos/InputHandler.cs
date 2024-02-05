@@ -29,13 +29,22 @@ public class InputHandler
         }
         if (e.Code == Keyboard.Key.Q)
         {
-            Strategos.isInputBoxActive = true;
-            Strategos.ConfigValue = ConfigValue.NoiseSeed;
+            if (Strategos.SelectedUnit != null)
+            {
+                Strategos.SelectedUnit.MovementPoints += 2;
+            }
         }
         if (e.Code == Keyboard.Key.R)
         {
             Strategos.isInputBoxActive = true;
             Strategos.ConfigValue = ConfigValue.NoiseRepeat;
+        }
+        if (e.Code == Keyboard.Key.Space)
+        {
+            foreach(Unit unit in Unit.unitList)
+            {
+                unit.MovementPoints += 2;
+            }
         }
         if (e.Code == Keyboard.Key.Delete)
         {
@@ -68,19 +77,28 @@ public class InputHandler
         Vector2f worldPos = window.MapPixelToCoords(Mouse.GetPosition(window), window.GetView());
         Cube cube = Hex.PixelToCube(new Vector2f(worldPos.X, worldPos.Y));
 
+        if (e.Button == Mouse.Button.Left)
+        {
+            Hex hex = Hex.GetFromCube(cube, hexStorage);
+            if (hex != null && hex.UnitOnTile != null)
+            {
+                Unit unit = hex.UnitOnTile;
+                Strategos.SelectedUnit = unit;
+                unit.CreateMovementRangeSprites(hexStorage);
+            }
+            else
+            {
+                Strategos.SelectedUnit = null;
+                Unit.MovementRangeSprite.Clear();
+            }
+        }
+
         if (e.Button == Mouse.Button.Right)
         {
-            cubes = Cube.Linedraw(new Cube(0, 0, 0), cube);
-            if (cubes != null)
+            Hex hex = Hex.GetFromCube(cube, hexStorage);
+            if (Strategos.SelectedUnit != null && hex != null)
             {
-                foreach (Cube cubeToChange in cubes)
-                {
-                    Hex hexToChange = Hex.GetFromCube(cubeToChange, hexStorage);
-                    if (hexToChange != null)
-                    {
-                        hexToChange.Sprite.Color = Color.Red;
-                    }
-                }
+                Strategos.SelectedUnit.Move(hexStorage, (int)cube.Q, (int)cube.R);
             }
         }
         if (e.Button == Mouse.Button.Middle)
